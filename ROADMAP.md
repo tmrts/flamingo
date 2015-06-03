@@ -1,4 +1,5 @@
-- [x] User & Password Management
+- [x] Docker Test Environment
+- [-] User & Password Management
 - [ ] SSH Configuration
 - [ ] Manage and Modify IPtables/Netfilter Rules
 - [ ] RESTful Client
@@ -9,9 +10,9 @@
     - [ ] User-Data
     - [ ] Meta-Data
 - [ ] Disk Volume Management
+- [ ] Packaging
 - [ ] Integration Tests
     - [ ] Atomic Host
     - [ ] Fedora
     - [ ] CentOS
 - [ ] Plug-in Layer
-
