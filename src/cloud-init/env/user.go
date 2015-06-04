@@ -35,7 +35,7 @@ func (usr *User) FlattenArguments() []string {
 }
 
 func NewUser(usr User) error {
-	args := usr.flattenArguments()
+	args := usr.FlattenArguments()
 
 	cmd := exec.Command("useradd", args...)
 	err := cmd.Run()

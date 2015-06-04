@@ -29,6 +29,6 @@ func TestNewUser(t *testing.T) {
 	}
 
 	if newUser.Username != "dummyUser" {
-		t.Fatalf("user name discrepancy -> %v", newUser.Username)
+		t.Errorf("user name discrepancy -> %v", newUser.Username)
 	}
 }
