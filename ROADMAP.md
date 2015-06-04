@@ -1,18 +1,19 @@
 - [x] Docker Test Environment
-- [x] User & Password Management
+    - [ ] Atomic Host
+    - [x] Fedora
+    - [x] CentOS
+- [ ] **User & Password Management**
 - [ ] SSH Configuration
 - [ ] Manage and Modify IPtables/Netfilter Rules
 - [ ] RESTful Client
 - [ ] Running Custom Scripts
 - [ ] Manage Services at Boot
+- [ ] Atomic Host Package Configuration
 - [ ] Tool Configuration
     - [ ] Command Line
     - [ ] User-Data
     - [ ] Meta-Data
-- [ ] Disk Volume Management
 - [ ] Packaging
 - [ ] Integration Tests
-    - [ ] Atomic Host
-    - [ ] Fedora
-    - [ ] CentOS
+- [ ] Disk Volume Management
 - [ ] Plug-in Layer
