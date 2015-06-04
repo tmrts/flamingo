@@ -7,7 +7,9 @@ import (
 
 func main() {
 	argMap := map[string]string{
-		"user-data": "/etc/file",
+		"user-data": "dummyUserData",
+		"meta-data": "dummyMetaData",
 	}
+
 	fmt.Println(env.FlattenArguments(argMap))
 }
