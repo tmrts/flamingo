@@ -1,5 +1,6 @@
 package env
 
 type Group struct {
-	Name string
+	Name     string
+	Password string
 }
