@@ -3,6 +3,8 @@ package env
 import (
 	"errors"
 	"fmt"
+
+	"github.com/TamerTas/cloud-init/pkg/cmd"
 )
 
 const (

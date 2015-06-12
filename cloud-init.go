@@ -1,9 +1,6 @@
 package main
 
-import (
-	"env"
-	"fmt"
-)
+import "fmt"
 
 func main() {
 	argMap := map[string]string{
@@ -11,5 +8,5 @@ func main() {
 		"meta-data": "dummyMetaData",
 	}
 
-	fmt.Println(env.FlattenArguments(argMap))
+	fmt.Println(argMap)
 }

@@ -3,6 +3,10 @@ package context
 import (
 	"strconv"
 	"strings"
+
+	"github.com/TamerTas/cloud-init/pkg/cmd"
+	"github.com/TamerTas/cloud-init/pkg/env"
+	"github.com/TamerTas/cloud-init/pkg/utils"
 )
 
 type GroupShadowEntry struct {

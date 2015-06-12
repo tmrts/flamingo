@@ -6,6 +6,10 @@ import (
 	"os/exec"
 	"strconv"
 	"strings"
+
+	"github.com/TamerTas/cloud-init/pkg/cmd"
+	"github.com/TamerTas/cloud-init/pkg/env"
+	"github.com/TamerTas/cloud-init/pkg/utils"
 )
 
 type UserShadowEntry struct {
