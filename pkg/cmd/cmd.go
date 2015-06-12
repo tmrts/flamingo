@@ -1,4 +1,4 @@
-package env
+package cmd
 
 import (
 	"errors"

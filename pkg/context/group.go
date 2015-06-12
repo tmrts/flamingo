@@ -1,4 +1,4 @@
-package env
+package context
 
 import (
 	"strconv"
@@ -21,11 +21,11 @@ type Group struct {
 }
 
 func CreateNewGroup(grp Group) error {
-	args := GetArgumentFormOfStruct(grp)
+	args := utils.GetArgumentFormOfStruct(grp)
 
 	args = append(args, grp.Name)
 
-	_, err := ExecuteCommand("groupadd", args...)
+	_, err := cmd.ExecuteCommand("groupadd", args...)
 
 	return err
 }
@@ -45,7 +45,7 @@ func parseGroupEntry(groupEntry string) *Group {
 }
 
 func GetGroup(key string) (*Group, error) {
-	entry, err := GetEntryFrom(GroupDatabase, key)
+	entry, err := env.GetEntryFrom(env.GroupDatabase, key)
 	if err != nil {
 		return nil, err
 	}
@@ -69,7 +69,7 @@ func parseGroupShadowEntry(groupEntry string) *GroupShadowEntry {
 }
 
 func GetGroupShadowEntry(key string) (*GroupShadowEntry, error) {
-	shadowEntry, err := GetEntryFrom(GroupShadowDatabase, key)
+	shadowEntry, err := env.GetEntryFrom(env.GroupShadowDatabase, key)
 	if err != nil {
 		return nil, err
 	}
@@ -80,7 +80,7 @@ func GetGroupShadowEntry(key string) (*GroupShadowEntry, error) {
 }
 
 func (grp *Group) SetPassword(passwordHash string) error {
-	_, err := ExecuteCommand("groupmod", grp.Name, "--password="+passwordHash)
+	_, err := cmd.ExecuteCommand("groupmod", grp.Name, "--password="+passwordHash)
 
 	return err
 }

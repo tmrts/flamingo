@@ -1,4 +1,4 @@
-package env
+package context
 
 import (
 	"fmt"
@@ -31,11 +31,11 @@ type User struct {
 }
 
 func CreateNewUser(usr User) error {
-	args := GetArgumentFormOfStruct(usr)
+	args := utils.GetArgumentFormOfStruct(usr)
 
 	args = append(args, usr.Name)
 
-	_, err := ExecuteCommand("useradd", args...)
+	_, err := cmd.ExecuteCommand("useradd", args...)
 
 	return err
 }
@@ -55,7 +55,7 @@ func parsePasswdEntry(passwdEntry string) *User {
 }
 
 func GetUser(key string) (*User, error) {
-	entry, err := GetEntryFrom(UserDatabase, key)
+	entry, err := env.GetEntryFrom(env.UserDatabase, key)
 	if err != nil {
 		return nil, err
 	}
@@ -73,7 +73,7 @@ func parseUserShadowEntry(shadowEntry string) *UserShadowEntry {
 }
 
 func GetUserShadowEntry(key string) (*UserShadowEntry, error) {
-	shadowEntry, err := GetEntryFrom(UserShadowDatabase, key)
+	shadowEntry, err := env.GetEntryFrom(env.UserShadowDatabase, key)
 	if err != nil {
 		return nil, err
 	}

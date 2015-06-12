@@ -16,7 +16,7 @@ const (
 // Returns the raw database entry/entries or a meaningful error message
 // about the retrieval of the key.
 func GetEntryFrom(database, key string) (string, error) {
-	out, err := ExecuteCommand("getent", database, key)
+	out, err := cmd.ExecuteCommand("getent", database, key)
 	if err != nil {
 		switch err.Error() {
 		case "exit status 1":
