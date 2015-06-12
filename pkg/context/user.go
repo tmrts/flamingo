@@ -7,7 +7,6 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/TamerTas/cloud-init/pkg/cmd"
 	"github.com/TamerTas/cloud-init/pkg/env"
 	"github.com/TamerTas/cloud-init/pkg/utils"
 )
@@ -39,7 +38,7 @@ func CreateNewUser(usr User) error {
 
 	args = append(args, usr.Name)
 
-	_, err := cmd.ExecuteCommand("useradd", args...)
+	_, err := env.ExecuteCommand("useradd", args...)
 
 	return err
 }

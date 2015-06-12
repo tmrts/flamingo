@@ -4,7 +4,6 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/TamerTas/cloud-init/pkg/cmd"
 	"github.com/TamerTas/cloud-init/pkg/env"
 	"github.com/TamerTas/cloud-init/pkg/utils"
 )
@@ -29,7 +28,7 @@ func CreateNewGroup(grp Group) error {
 
 	args = append(args, grp.Name)
 
-	_, err := cmd.ExecuteCommand("groupadd", args...)
+	_, err := env.ExecuteCommand("groupadd", args...)
 
 	return err
 }
@@ -84,7 +83,7 @@ func GetGroupShadowEntry(key string) (*GroupShadowEntry, error) {
 }
 
 func (grp *Group) SetPassword(passwordHash string) error {
-	_, err := cmd.ExecuteCommand("groupmod", grp.Name, "--password="+passwordHash)
+	_, err := env.ExecuteCommand("groupmod", grp.Name, "--password="+passwordHash)
 
 	return err
 }

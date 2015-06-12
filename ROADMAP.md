@@ -1,12 +1,12 @@
 - [x] Docker Test Environment
-    - [ ] Atomic Host
+    - [X] Atomic Host
     - [x] Fedora
     - [x] CentOS
-- [ ] **User & Password Management**
-- [ ] SSH Configuration
+- [X] **User & Password Management**
+- [X] SSH Configuration
+- [ ] Running Custom Scripts
 - [ ] Manage and Modify IPtables/Netfilter Rules
 - [ ] RESTful Client
-- [ ] Running Custom Scripts
 - [ ] Manage Services at Boot
 - [ ] Atomic Host Package Configuration
 - [ ] Tool Configuration
