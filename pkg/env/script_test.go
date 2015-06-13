@@ -19,17 +19,17 @@ func TestScriptValidation(t *testing.T) {
 		},
 		{
 			Case:     "fileWithInvalidShabang",
-			Content:  "# !\nSome command\n",
+			Content:  "# ! /bin/bash\nSome command\n",
 			IsScript: false,
 		},
 		{
 			Case:     "emptyScriptWithShabang",
-			Content:  "#! /usr/bin/env bash\n\n",
+			Content:  "#! /bin/bash\n\n",
 			IsScript: true,
 		},
 		{
 			Case:     "scriptWithShabang",
-			Content:  "#! /usr/bin/env bash\nprintf ${PWD}\n",
+			Content:  "#! /bin/bash\nprintf ${PWD}\n",
 			IsScript: true,
 		},
 	}
@@ -61,14 +61,18 @@ func TestScriptExecution(t *testing.T) {
 		t.Fatalf("error creating a temporary script file -> %v", err)
 	}
 
+	if err := testScript.Chmod(0777); err != nil {
+		t.Fatalf("error changing permissions of temporary script file -> %v", err)
+	}
+
+	testScript.Close()
+
 	out, err := ExecuteScript(testScript.Name())
 	if err != nil {
-		t.Errorf("error executing a script -> %v", err)
+		t.Fatalf("error executing a script -> %v", err)
 	}
 
 	if out != "Yeehaw" {
 		t.Errorf("error executing a script expected: Yeehaw, got: %v", out)
 	}
-
-	testScript.Close()
 }
