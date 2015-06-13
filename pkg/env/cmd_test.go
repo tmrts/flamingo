@@ -8,7 +8,7 @@ func TestExecuteCommand(t *testing.T) {
 		t.Fatalf("error executing echo command -> %v", err)
 	}
 
-	if out != nil {
+	if out != "" {
 		t.Errorf("wrong output for echo command -> expected: %v, got: %v", "this", err)
 	}
 }
