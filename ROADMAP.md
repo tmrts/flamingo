@@ -3,8 +3,8 @@
     - [x] Fedora
     - [x] CentOS
 - [X] **User & Password Management**
-- [X] SSH Configuration
-- [ ] Running Custom Scripts
+- [X] Running Custom Scripts
+- [ ] SSH Configuration
 - [ ] Manage and Modify IPtables/Netfilter Rules
 - [ ] RESTful Client
 - [ ] Manage Services at Boot
