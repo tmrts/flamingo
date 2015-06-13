@@ -20,6 +20,7 @@ func CreateTempFile(content string) (*os.File, error) {
 	if err != nil {
 		return nil, err
 	}
+	tmpFile.Sync()
 
 	return tmpFile, nil
 }

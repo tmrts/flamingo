@@ -1,8 +1,10 @@
 package env
 
-import "testing"
+import (
+	"testing"
 
-import "github.com/TamerTas/cloud-init/pkg/utils"
+	"github.com/TamerTas/cloud-init/pkg/utils"
+)
 
 func TestScriptValidation(t *testing.T) {
 	scriptContent := "#! /usr/bin/env bash\n"
@@ -22,4 +24,6 @@ func TestScriptValidation(t *testing.T) {
 	if out != "Yeehaw" {
 		t.Errorf("error executing a script expected: Yeehaw, got: %v", out)
 	}
+
+	testScript.Close()
 }
