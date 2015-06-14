@@ -1,6 +1,7 @@
 package env
 
 import (
+	"os"
 	"testing"
 
 	"github.com/TamerTas/cloud-init/pkg/utils"
@@ -39,6 +40,7 @@ func TestScriptValidation(t *testing.T) {
 		if err != nil {
 			t.Fatalf("error creating a temporary file -> %v", err)
 		}
+		defer os.Remove(tmpFile.Name())
 
 		isScript, err := HasShabang(tmpFile.Name())
 		if err != nil {
@@ -60,6 +62,7 @@ func TestScriptExecution(t *testing.T) {
 	if err != nil {
 		t.Fatalf("error creating a temporary script file -> %v", err)
 	}
+	defer os.Remove(testScript.Name())
 
 	if err := testScript.Chmod(0777); err != nil {
 		t.Fatalf("error changing permissions of temporary script file -> %v", err)
