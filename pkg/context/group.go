@@ -23,6 +23,7 @@ type Group struct {
 	Members []string
 }
 
+// CreateNewGroup adds the supplied Group to the system groups.
 func CreateNewGroup(grp Group) error {
 	args := utils.GetArgumentFormOfStruct(grp)
 
@@ -32,6 +33,16 @@ func CreateNewGroup(grp Group) error {
 
 	return err
 }
+
+// Parses NSS GroupDatabase Entry.
+// Example:
+//	 group:x:1:user1,user2 is turned into:
+//	 Group {
+//	 	Name: "group",
+//	 	GID: 1,
+//	 	Members: user1, user2,
+//	 	IsSystemAccount: true,
+//	 }
 
 func parseGroupEntry(groupEntry string) *Group {
 	groupInfo := strings.Split(groupEntry, ":")
@@ -47,6 +58,7 @@ func parseGroupEntry(groupEntry string) *Group {
 	}
 }
 
+// GetGroup queries the NSS Group Database.
 func GetGroup(key string) (*Group, error) {
 	entry, err := env.GetEntryFrom(env.GroupDatabase, key)
 	if err != nil {
@@ -57,6 +69,7 @@ func GetGroup(key string) (*Group, error) {
 	return group, nil
 }
 
+// Parses NSS GroupShadowDatabase Entry.
 func parseGroupShadowEntry(groupEntry string) *GroupShadowEntry {
 	groupInfo := strings.Split(groupEntry, ":")
 
@@ -71,6 +84,7 @@ func parseGroupShadowEntry(groupEntry string) *GroupShadowEntry {
 	}
 }
 
+// GetGroup queries the NSS Group Shadow Database.
 func GetGroupShadowEntry(key string) (*GroupShadowEntry, error) {
 	shadowEntry, err := env.GetEntryFrom(env.GroupShadowDatabase, key)
 	if err != nil {
@@ -82,6 +96,7 @@ func GetGroupShadowEntry(key string) (*GroupShadowEntry, error) {
 	return groupShadowEntry, nil
 }
 
+// SetPassword changes the group's password to the given password hash.
 func (grp *Group) SetPassword(passwordHash string) error {
 	_, err := env.ExecuteCommand("groupmod", grp.Name, "--password="+passwordHash)
 
