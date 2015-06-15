@@ -7,6 +7,10 @@ import (
 	"os/exec"
 )
 
+// ExecuteCommand wraps the command execution pattern required in os/exec package.
+// The command is executed with the supplied arguments and the output is returned
+// to the caller. If an error occurs during the command execution, an error is
+// returned with the messages read from the stderr of the executed command.
 func ExecuteCommand(command string, args ...string) (string, error) {
 	cmd := exec.Command(command, args...)
 
