@@ -38,12 +38,11 @@ func CreateNewGroup(grp Group) error {
 // Example:
 //	 group:x:1:user1,user2 is turned into:
 //	 Group {
-//	 	Name: "group",
-//	 	GID: 1,
-//	 	Members: user1, user2,
+//	 	Name:			 "group",
+//	 	GID:			 "1",
+//	 	Members:		 []string {"user1", "user2"},
 //	 	IsSystemAccount: true,
 //	 }
-
 func parseGroupEntry(groupEntry string) *Group {
 	groupInfo := strings.Split(groupEntry, ":")
 	groupID, _ := strconv.Atoi(groupInfo[2])

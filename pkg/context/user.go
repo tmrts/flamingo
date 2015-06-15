@@ -33,6 +33,7 @@ type User struct {
 	CreateUserGroupWithSameName string `flag:"user-group"`
 }
 
+// CreateNewUser adds the supplied User to the users.
 func CreateNewUser(usr User) error {
 	args := utils.GetArgumentFormOfStruct(usr)
 
@@ -43,6 +44,18 @@ func CreateNewUser(usr User) error {
 	return err
 }
 
+// Parses NSS PasswdDatabase Entry.
+// Example:
+//	 user:x:1000:1000:A normal user.:/home/user:/bin/bash is turned into:
+//	 User {
+//	 	Name: "group",
+//	 	UID: "1000",
+//	 	PrimaryGroup: "1000",
+//	 	Description: "A normal user",
+//	 	HomeDir: "/home/user",
+//	 	DefaultShell: "/bin/bash",
+//	 	IsSystemAccount: false,
+//	 }
 func parsePasswdEntry(passwdEntry string) *User {
 	userInfo := strings.Split(passwdEntry, ":")
 	userID, _ := strconv.Atoi(userInfo[2])
@@ -57,6 +70,7 @@ func parsePasswdEntry(passwdEntry string) *User {
 	}
 }
 
+// GetUser queries the NSS Passwd Database.
 func GetUser(key string) (*User, error) {
 	entry, err := env.GetEntryFrom(env.UserDatabase, key)
 	if err != nil {
@@ -67,6 +81,7 @@ func GetUser(key string) (*User, error) {
 	return user, nil
 }
 
+// Parses NSS UserShadowDatabase Entry.
 func parseUserShadowEntry(shadowEntry string) *UserShadowEntry {
 	userShadowInfo := strings.Split(shadowEntry, ":")
 
@@ -75,6 +90,7 @@ func parseUserShadowEntry(shadowEntry string) *UserShadowEntry {
 	}
 }
 
+// GetUserShadowEntry queries the NSS User Shadow Database.
 func GetUserShadowEntry(key string) (*UserShadowEntry, error) {
 	shadowEntry, err := env.GetEntryFrom(env.UserShadowDatabase, key)
 	if err != nil {
@@ -86,6 +102,7 @@ func GetUserShadowEntry(key string) (*UserShadowEntry, error) {
 	return userShadowEntry, nil
 }
 
+// SetPassword changes the user's password to the given password hash.
 func (usr *User) SetPassword(passwordHash string) error {
 	cmd := exec.Command("chpasswd", "-e")
 
