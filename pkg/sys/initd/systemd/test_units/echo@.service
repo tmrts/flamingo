@@ -1,0 +1,6 @@
+[Unit]
+Description=echo service
+
+[Service]
+ExecStart=-/bin/cat
+StandardInput=socket

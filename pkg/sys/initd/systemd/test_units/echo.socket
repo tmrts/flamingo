@@ -1,0 +1,6 @@
+[Unit]
+Description=echo socket
+
+[Socket]
+ListenStream=2222
+Accept=yes
