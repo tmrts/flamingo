@@ -74,3 +74,7 @@ func GetArgumentFormOfStruct(strt interface{}) (flags []string) {
 
 	return
 }
+
+func GetFlagFormOfStruct(strt interface{}) (flags []string) {
+	return GetArgumentFormOfStruct(strt)
+}
