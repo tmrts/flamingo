@@ -4,10 +4,10 @@ import (
 	"testing"
 
 	. "github.com/smartystreets/goconvey/convey"
+	. "github.com/tmrts/flamingo/pkg/util/testutil"
 
-	"github.com/TamerTas/flamingo/pkg/sys"
-	"github.com/TamerTas/flamingo/pkg/sys/identity"
-	"github.com/TamerTas/flamingo/pkg/util/testutil"
+	"github.com/tmrts/flamingo/pkg/sys"
+	"github.com/tmrts/flamingo/pkg/sys/identity"
 )
 
 func TestUserCreation(t *testing.T) {
@@ -32,7 +32,7 @@ func TestUserCreation(t *testing.T) {
 			err := idmgr.CreateUser(user)
 
 			So(<-exec.Exec, ShouldEqual, "useradd")
-			So(<-exec.Args, testutil.ShouldSetEqual, []string{"newUser", "--password=PHASH", "--uid=1001", "--gid=1001"})
+			So(<-exec.Args, ShouldSetEqual, []string{"newUser", "--password=PHASH", "--uid=1001", "--gid=1001"})
 
 			So(err, ShouldEqual, nil)
 		})
@@ -56,7 +56,7 @@ func TestUserSetPassword(t *testing.T) {
 			err := idmgr.SetGroupPassword(uname, phash)
 
 			So(<-exec.Exec, ShouldEqual, "chpasswd")
-			So(<-exec.Args, testutil.ShouldSetEqual, []string{"-e", "existentUser:PASSWORD_HASH"})
+			So(<-exec.Args, ShouldSetEqual, []string{"-e", "existentUser:PASSWORD_HASH"})
 
 			So(err, ShouldEqual, nil)
 		})
@@ -84,7 +84,7 @@ func TestGroupCreation(t *testing.T) {
 			err := idmgr.CreateGroup(user)
 
 			So(<-exec.Exec, ShouldEqual, "groupadd")
-			So(<-exec.Args, testutil.ShouldSetEqual, []string{"newGroup", "--password=PHASH", "--gid=1002"})
+			So(<-exec.Args, ShouldSetEqual, []string{"newGroup", "--password=PHASH", "--gid=1002"})
 
 			So(err, ShouldEqual, nil)
 		})
@@ -108,7 +108,7 @@ func TestGroupSetPassword(t *testing.T) {
 			err := idmgr.SetGroupPassword(gname, phash)
 
 			So(<-exec.Exec, ShouldEqual, "groupmod")
-			So(<-exec.Args, testutil.ShouldSetEqual, []string{"existentGroup", "--password=PASSWORD_HASH"})
+			So(<-exec.Args, ShouldSetEqual, []string{"existentGroup", "--password=PASSWORD_HASH"})
 
 			So(err, ShouldEqual, nil)
 		})
