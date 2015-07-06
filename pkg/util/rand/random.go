@@ -15,6 +15,7 @@ func Seed() uint32 {
 	return seed
 }
 
+// String returns a random string of given length.
 func String(length int) string {
 	randomNum := Seed()
 
