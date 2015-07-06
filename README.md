@@ -1,6 +1,10 @@
-# cloud-init
+# flamingo
 
-This tool enables the customization of images through network
+Flamingo is an open source lightweight tool for contextualizing cloud instances.
 
-*BEWARE:* The tests in this repository are intended to be run on disposable docker containers due to the nature of this tool. Please don't run them on your own machine.
+Flamingo is:
+    - fast: courtesy of Go and compilers
+    - lightweight: all dependencies included
+    - extensible: modular, composable, tested
 
+Flamingo is in **Alpha** stage at the moment.
