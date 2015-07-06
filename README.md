@@ -1,4 +1,6 @@
-# flamingo
+# Flamingo
+
+![Flamingo Logo](/logo.png)
 
 Flamingo is an open source lightweight tool for contextualizing cloud instances.
 
