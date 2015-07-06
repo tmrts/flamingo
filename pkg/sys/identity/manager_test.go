@@ -5,9 +5,9 @@ import (
 
 	. "github.com/smartystreets/goconvey/convey"
 
-	"github.com/tmrts/flamingo/pkg/sys"
-	"github.com/tmrts/flamingo/pkg/sys/identity"
-	"github.com/tmrts/flamingo/pkg/util/testutil"
+	"github.com/TamerTas/flamingo/pkg/sys"
+	"github.com/TamerTas/flamingo/pkg/sys/identity"
+	"github.com/TamerTas/flamingo/pkg/util/testutil"
 )
 
 func TestUserCreation(t *testing.T) {
@@ -40,6 +40,27 @@ func TestUserCreation(t *testing.T) {
 }
 
 func TestUserSetPassword(t *testing.T) {
+	Convey("Given a user name and a password hash and an executor", t, func() {
+		uname, phash := "existentUser", "PASSWORD_HASH"
+
+		exec := sys.NewMockExecutor()
+
+		idmgr := &identity.ManagerImplementation{
+			Executor: exec,
+		}
+
+		Convey("It should change the password of the user", func() {
+			exec.OutStr <- ""
+			exec.OutErr <- nil
+
+			err := idmgr.SetGroupPassword(uname, phash)
+
+			So(<-exec.Exec, ShouldEqual, "chpasswd")
+			So(<-exec.Args, testutil.ShouldSetEqual, []string{"-e", "existentUser:PASSWORD_HASH"})
+
+			So(err, ShouldEqual, nil)
+		})
+	})
 }
 
 func TestGroupCreation(t *testing.T) {
@@ -56,7 +77,7 @@ func TestGroupCreation(t *testing.T) {
 			Executor: exec,
 		}
 
-		Convey("It should create a new user in the system", func() {
+		Convey("It should create a new group in the system", func() {
 			exec.OutStr <- ""
 			exec.OutErr <- nil
 
@@ -72,7 +93,7 @@ func TestGroupCreation(t *testing.T) {
 
 func TestGroupSetPassword(t *testing.T) {
 	Convey("Given a group name and a password hash and an executor", t, func() {
-		uname, phash := "existentGroup", "PASSWORD_HASH"
+		gname, phash := "existentGroup", "PASSWORD_HASH"
 
 		exec := sys.NewMockExecutor()
 
@@ -80,11 +101,11 @@ func TestGroupSetPassword(t *testing.T) {
 			Executor: exec,
 		}
 
-		Convey("It should change the password of the user", func() {
+		Convey("It should change the password of the group", func() {
 			exec.OutStr <- ""
 			exec.OutErr <- nil
 
-			err := idmgr.SetGroupPassword(uname, phash)
+			err := idmgr.SetGroupPassword(gname, phash)
 
 			So(<-exec.Exec, ShouldEqual, "groupmod")
 			So(<-exec.Args, testutil.ShouldSetEqual, []string{"existentGroup", "--password=PASSWORD_HASH"})
