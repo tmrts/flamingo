@@ -2,18 +2,18 @@
     - [X] Atomic Host
     - [x] Fedora
     - [x] CentOS
-- [X] **User & Password Management**
+- [X] User & Password Management
 - [X] Running Custom Scripts
-- [ ] SSH Configuration
-- [ ] Manage and Modify IPtables/Netfilter Rules
-- [ ] RESTful Client
-- [ ] Manage Services at Boot
-- [ ] Atomic Host Package Configuration
+- [X] SSH Configuration
+- [X] Manage Services at Boot
+- [X] Manage and Modify IPtables/Netfilter Rules
+- [ ] **RESTful Client**
 - [ ] Tool Configuration
     - [ ] Command Line
     - [ ] User-Data
     - [ ] Meta-Data
 - [ ] Packaging
+- [ ] Atomic Host Package Configuration
 - [ ] Integration Tests
 - [ ] Disk Volume Management
 - [ ] Plug-in Layer
