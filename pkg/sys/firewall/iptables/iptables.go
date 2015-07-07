@@ -3,9 +3,11 @@ package iptables
 import (
 	"fmt"
 	"os/exec"
+	"strings"
 
 	"github.com/tmrts/flamingo/pkg/sys"
 	"github.com/tmrts/flamingo/pkg/sys/firewall"
+	"github.com/tmrts/flamingo/pkg/util"
 )
 
 type Target string
@@ -16,15 +18,39 @@ const (
 	Return Target = "RETURN"
 )
 
+type Operation string
+
 const (
-	Append = "--append"
-	Delete = "--delete"
-	Insert = "--insert"
-	Check  = "--check"
+	Append Operation = "append"
+	Delete Operation = "delete"
+	Insert Operation = "insert"
+	Check  Operation = "check"
 )
 
 type Implementation struct {
 	sys.Executor
+}
+
+type Rule struct {
+	Source      string `flag:"source"`
+	Destination string `flag:"source"`
+
+	FromInterface string `flag:"in-interface"`
+	ToInterface   string `flag:"out-interface"`
+
+	IsSyncPackage bool `flag:"syn"`
+
+	Protocol string `flag:"protocol"`
+
+	Match string `flag:"match"`
+
+	Target Target `flag:"jump"`
+}
+
+func ruleToFlag(r *Rule) string {
+	flagForm := util.GetFlagFormOfStruct(*r)
+
+	return strings.Join(flagForm, " ")
 }
 
 func (impl *Implementation) CheckDependencies() error {
@@ -36,26 +62,10 @@ func (impl *Implementation) CheckDependencies() error {
 	return nil
 }
 
-func (impl *Implementation) AppendTo(c firewall.Chain, rule ...string) error {
-	_, err := impl.Execute(Append, c.Name)
+func (impl *Implementation) Perform(op Operation, c firewall.Chain, r *Rule) error {
+	action := fmt.Sprintf("--table=%v --%v=%v", c.Table, op, c.Name)
+
+	_, err := impl.Execute("iptables", action, ruleToFlag(r))
 
 	return err
-}
-
-func (impl *Implementation) DeleteFrom(c firewall.Chain, rule ...string) error {
-	_, err := impl.Execute(Delete, c.Name)
-
-	return err
-}
-
-func (impl *Implementation) InsertTo(c firewall.Chain, rule ...string) error {
-	_, err := impl.Execute(Insert, c.Name)
-
-	return err
-}
-
-func (impl *Implementation) Check(c firewall.Chain, rule ...string) (bool, error) {
-	_, err := impl.Execute(Check, c.Name)
-
-	return err != nil, err
 }
