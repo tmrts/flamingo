@@ -5,6 +5,7 @@ type Table string
 const (
 	Filter Table = "filter"
 	Nat    Table = "nat"
+	Raw    Table = "raw"
 )
 
 type Chain struct {
