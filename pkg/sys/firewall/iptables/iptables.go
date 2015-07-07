@@ -3,7 +3,6 @@ package iptables
 import (
 	"fmt"
 	"os/exec"
-	"strings"
 
 	"github.com/tmrts/flamingo/pkg/sys"
 	"github.com/tmrts/flamingo/pkg/sys/firewall"
@@ -13,9 +12,9 @@ import (
 type Target string
 
 const (
-	Accept Target = "ACCEPT"
-	Drop   Target = "DROP"
-	Return Target = "RETURN"
+	AcceptTarget Target = "ACCEPT"
+	ReturnTarget Target = "RETURN"
+	DropTarget   Target = "DROP"
 )
 
 type Operation string
@@ -32,8 +31,8 @@ type Implementation struct {
 }
 
 type Rule struct {
-	Source      string `flag:"source"`
-	Destination string `flag:"source"`
+	Source      []string `flag:"source"`
+	Destination []string `flag:"destination"`
 
 	FromInterface string `flag:"in-interface"`
 	ToInterface   string `flag:"out-interface"`
@@ -42,15 +41,11 @@ type Rule struct {
 
 	Protocol string `flag:"protocol"`
 
-	Match string `flag:"match"`
-
 	Target Target `flag:"jump"`
 }
 
-func ruleToFlag(r *Rule) string {
-	flagForm := util.GetFlagFormOfStruct(*r)
-
-	return strings.Join(flagForm, " ")
+func (r *Rule) FlagForm() []string {
+	return util.GetFlagFormOfStruct(*r)
 }
 
 func (impl *Implementation) CheckDependencies() error {
@@ -63,9 +58,18 @@ func (impl *Implementation) CheckDependencies() error {
 }
 
 func (impl *Implementation) Perform(op Operation, c firewall.Chain, r *Rule) error {
-	action := fmt.Sprintf("--table=%v --%v=%v", c.Table, op, c.Name)
+	if r.Target == "" {
+		return fmt.Errorf("iptables: rule doesnt have a target")
+	}
 
-	_, err := impl.Execute("iptables", action, ruleToFlag(r))
+	table := fmt.Sprintf("--table=%v", c.Table)
+	action := fmt.Sprintf("--%v=%v", op, c.Name)
+
+	args := []string{"--wait", table, action}
+
+	args = append(args, r.FlagForm()...)
+
+	_, err := impl.Execute("iptables", args...)
 
 	return err
 }

@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	. "github.com/smartystreets/goconvey/convey"
+	. "github.com/tmrts/flamingo/pkg/util/testutil"
 
 	"github.com/tmrts/flamingo/pkg/sys"
 	"github.com/tmrts/flamingo/pkg/sys/firewall"
@@ -11,51 +12,66 @@ import (
 )
 
 func TestAddingFirewallRules(t *testing.T) {
-	Convey("Given a firewall manager implementation", t, func() {
+	Convey("Given an action, a target chain and a package filtering rule", t, func() {
+		rule := &iptables.Rule{
+			Source:        []string{"192.168.1.1", "192.168.1.2"},
+			Destination:   []string{"192.168.1.3", "192.168.1.4"},
+			FromInterface: "eth0",
+			ToInterface:   "eth1",
+			Protocol:      "tcp",
+			IsSyncPackage: true,
+			Target:        iptables.DropTarget,
+		}
+
+		action := iptables.Append
+
+		chain := firewall.Chain{
+			Name:  "INPUT",
+			Table: firewall.Filter,
+		}
+
+		Convey("The firewall manager implementation should perform the action", func() {
+			exec := sys.NewStubExecutor("", nil)
+			fwllmgr := iptables.Implementation{exec}
+
+			err := fwllmgr.Perform(action, chain, rule)
+			So(err, ShouldBeNil)
+
+			So(<-exec.Exec, ShouldEqual, "iptables")
+			So(<-exec.Args, ShouldBeSuperSetOf, []string{
+				"--table=filter",
+				"--append=INPUT",
+				"--source=192.168.1.1,192.168.1.2",
+				"--destination=192.168.1.3,192.168.1.4",
+				"--in-interface=eth0",
+				"--out-interface=eth1",
+				"--protocol=tcp",
+				"--jump=DROP",
+				"--syn",
+			})
+		})
+	})
+
+	Convey("When performing an operation", t, func() {
 		exec := sys.NewStubExecutor("", nil)
 		fwllmgr := iptables.Implementation{exec}
 
-		Convey("With a package filtering rule and a target chain", func() {
-			chain := firewall.Chain{
-				Name:  "INPUT",
-				Table: firewall.Filter,
-			}
+		chain := firewall.Chain{
+			Name:  "INPUT",
+			Table: firewall.Filter,
+		}
 
-			rule := &iptables.Rule{
-				Source: "192.168.1.0/34",
-			}
+		rule := &iptables.Rule{
+			Protocol: "tcp",
+			Target:   iptables.DropTarget,
+		}
 
-			Convey("It should append the rule to the chain", func() {
-				err := fwllmgr.Perform(iptables.Append, chain, rule)
+		Convey("The xtables lock should be acquired to prevent multiple updates at the same time", func() {
+			err := fwllmgr.Perform(iptables.Append, chain, rule)
+			So(err, ShouldBeNil)
 
-				So(<-exec.Exec, ShouldEqual, "iptables")
-				So(<-exec.Args, ShouldEqual, "")
-				So(err, ShouldBeNil)
-			})
-
-			Convey("It should delete the rule to the chain", func() {
-				err := fwllmgr.Perform(iptables.Delete, chain, rule)
-
-				So(<-exec.Exec, ShouldEqual, "iptables")
-				So(<-exec.Args, ShouldEqual, "")
-				So(err, ShouldBeNil)
-			})
-
-			Convey("It should insert the rule to the chain", func() {
-				err := fwllmgr.Perform(iptables.Insert, chain, rule)
-
-				So(<-exec.Exec, ShouldEqual, "iptables")
-				So(<-exec.Args, ShouldEqual, "")
-				So(err, ShouldBeNil)
-			})
-
-			Convey("It should check whether the rule exists in the chain", func() {
-				err := fwllmgr.Perform(iptables.Check, chain, rule)
-
-				So(<-exec.Exec, ShouldEqual, "iptables")
-				So(<-exec.Args, ShouldEqual, "")
-				So(err, ShouldBeNil)
-			})
+			So(<-exec.Exec, ShouldEqual, "iptables")
+			So(<-exec.Args, ShouldContain, "--wait")
 		})
 	})
 }
