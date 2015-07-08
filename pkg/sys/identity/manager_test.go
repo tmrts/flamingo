@@ -53,7 +53,7 @@ func TestUserSetPassword(t *testing.T) {
 			exec.OutStr <- ""
 			exec.OutErr <- nil
 
-			err := idmgr.SetGroupPassword(uname, phash)
+			err := idmgr.SetUserPassword(uname, phash)
 
 			So(<-exec.Exec, ShouldEqual, "chpasswd")
 			So(<-exec.Args, ShouldSetEqual, []string{"-e", "existentUser:PASSWORD_HASH"})
