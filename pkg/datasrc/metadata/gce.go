@@ -22,24 +22,27 @@ type GCEv1 struct {
 	}
 
 	NetworkInterfaces []struct {
-		AccessConfigs []struct {
-			ExternalIP net.IP
-			Type       string
-		}
 		IP           net.IP
 		Network      string
 		ForwardedIPs []net.IP
+
+		AccessConfigs []struct {
+			Type       string
+			ExternalIP net.IP
+		}
 	}
 
 	Disks []struct {
-		DeviceName string
-		Index      int
-		Mode       string
+		Index int
+
 		Type       string
+		DeviceName string
+		Mode       string
 	}
 
 	Attributes map[string]interface{}
-	Tags       []string
+
+	Tags []string
 }
 
 func (metadata *GCEv1) Digest() Digest {
