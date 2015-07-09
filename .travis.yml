@@ -8,6 +8,7 @@ matrix:
         - go: 1.3
 
 install:
+    - go get github.com/tools/godep
     - go get github.com/mattn/goveralls
     - GOPATH=$PWD/Godeps/_workspace:$GOPATH go install ./...
 
