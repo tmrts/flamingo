@@ -10,22 +10,22 @@
             "type": "PERSISTENT"
         }
     ],
-    "hostname": "centos.c.total-tooling-96110.internal",
-    "id": 533952008838200936,
+    "hostname": "centos.c.total-tooling-95181.internal",
+    "id": 534912008338700290,
     "image": "",
-    "machineType": "projects/939642202004/machineTypes/n1-standard-1",
+    "machineType": "projects/933502204051/machineTypes/n1-standard-1",
     "maintenanceEvent": "NONE",
     "networkInterfaces": [
         {
             "accessConfigs": [
                 {
-                    "externalIp": "104.155.29.138",
+                    "externalIp": "104.155.21.159",
                     "type": "ONE_TO_ONE_NAT"
                 }
             ],
             "forwardedIps": [],
-            "ip": "10.240.41.122",
-            "network": "projects/939642202004/networks/default"
+            "ip": "10.240.45.128",
+            "network": "projects/933502204051/networks/default"
         }
     ],
     "scheduling": {
@@ -33,11 +33,11 @@
         "onHostMaintenance": "MIGRATE"
     },
     "serviceAccounts": {
-        "939642202004-compute@developer.gserviceaccount.com": {
+        "933502204051-compute@developer.gserviceaccount.com": {
             "aliases": [
                 "default"
             ],
-            "email": "939642202004-compute@developer.gserviceaccount.com",
+            "email": "933502204051-compute@developer.gserviceaccount.com",
             "scopes": [
                 "https://www.googleapis.com/auth/computeaccounts.readonly",
                 "https://www.googleapis.com/auth/devstorage.read_only",
@@ -48,7 +48,7 @@
             "aliases": [
                 "default"
             ],
-            "email": "939642202004-compute@developer.gserviceaccount.com",
+            "email": "933502204051-compute@developer.gserviceaccount.com",
             "scopes": [
                 "https://www.googleapis.com/auth/computeaccounts.readonly",
                 "https://www.googleapis.com/auth/devstorage.read_only",
@@ -58,7 +58,7 @@
     },
     "tags": [],
     "virtualClock": {
-        "driftToken": "11239462191112056598"
+        "driftToken": "11209627461727297391"
     },
-    "zone": "projects/939642202004/zones/europe-west1-b"
+    "zone": "projects/933502204051/zones/europe-west1-b"
 }
