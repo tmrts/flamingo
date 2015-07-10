@@ -2,22 +2,24 @@ package metadata
 
 import "net"
 
+// GCEv1 represented the v1 compute meta-data provided by google compute engine
+// Uninteresting fields are unexported.
 type GCEv1 struct {
-	ID          float64
-	Image       string
+	iD          float64
+	image       string
 	Hostname    string
-	Description string
-	CpuPlatform string
-	MachineType string
-	Zone        string
+	description string
+	cpuPlatform string
+	machineType string
+	zone        string
 
-	MaintenanceEvent string
-	Scheduling       struct {
+	maintenanceEvent string
+	scheduling       struct {
 		AutomaticRestart  string
 		OnHostMaintenance string
 	}
 
-	VirtualClock struct {
+	virtualClock struct {
 		DriftToken string
 	}
 
@@ -40,21 +42,23 @@ type GCEv1 struct {
 		Mode       string
 	}
 
-	Attributes map[string]interface{}
+	attributes map[string]interface{}
 
-	Tags []string
+	tags []string
 }
 
+// Digest extracts the important parts of meta-data and returns it.
 func (metadata *GCEv1) Digest() Digest {
 	interfaces := []Interface{}
 
-	for _, intrfc := range metadata.NetworkInterfaces {
+	for _, ifc := range metadata.NetworkInterfaces {
 		i := Interface{
-			NetworkName: intrfc.Network,
-			PrivateIP:   intrfc.IP,
+			NetworkName: ifc.Network,
+			PrivateIP:   ifc.IP,
 			PublicIPs:   []net.IP{},
 		}
-		for _, conf := range intrfc.AccessConfigs {
+
+		for _, conf := range ifc.AccessConfigs {
 			i.PublicIPs = append(i.PublicIPs, conf.ExternalIP)
 		}
 

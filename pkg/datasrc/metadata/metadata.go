@@ -5,7 +5,20 @@ import (
 	"net"
 )
 
-type MetaData interface {
+type Provider string
+
+const (
+	GCE = "GoogleComputeEngine"
+	EC2 = "ElasticComputeCloud"
+)
+
+type Service interface {
+	Get(Version) Interface
+}
+
+type Version string
+
+type Interface interface {
 	Digest() Digest
 }
 
@@ -32,7 +45,7 @@ func (i Interface) String() string {
 }
 
 type Disk struct {
-	Name string
-	Mode string
-	Type string
+	Mode       string
+	Type       string
+	DeviceName string
 }
