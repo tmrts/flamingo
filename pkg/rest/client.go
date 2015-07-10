@@ -22,3 +22,17 @@ func (c *ClientImplementation) Perform(r *Request) (*Response, error) {
 
 	return &Response{resp}, nil
 }
+
+func request(method, url string, params ...Parameter) (*Response, error) {
+	r := &Request{
+		URL:     url,
+		Method:  method,
+		Headers: http.Header{},
+	}
+
+	for _, parametrize := range params {
+		parametrize(r)
+	}
+
+	return DefaultClient.Perform(r)
+}
