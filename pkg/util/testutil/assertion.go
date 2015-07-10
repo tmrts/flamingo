@@ -1,6 +1,9 @@
 package testutil
 
-import "fmt"
+import (
+	"fmt"
+	"reflect"
+)
 
 // Checks whether two slices contain the same elements.
 func ShouldSetEqual(actual interface{}, expected ...interface{}) (msg string) {
@@ -38,21 +41,20 @@ func ShouldSetEqual(actual interface{}, expected ...interface{}) (msg string) {
 }
 
 func ShouldConsistOf(actual interface{}, expected ...interface{}) (msg string) {
-	actualSlice, expectedSlice := actual.([]string), []string{}
+	msg = fmt.Sprintf("Expected:\t%v\nActual:\t%v\n(Should consist of the given elements)", expected, actual)
 
-	for _, v := range expected {
-		expectedSlice = append(expectedSlice, v.(string))
-	}
-
-	msg = fmt.Sprintf("Expected:\t%q\nActual:\t%q\n(Should consist of the given elements)", expectedSlice, actualSlice)
-
-	if len(actualSlice) != len(expectedSlice) {
-		return
-	}
-
-	for i, v := range actualSlice {
-		if v != expectedSlice[i] {
-			return
+	switch actual.(type) {
+	case []int:
+		for i, v := range actual.([]int) {
+			if !reflect.DeepEqual(v, expected[i]) {
+				return
+			}
+		}
+	case []string:
+		for i, v := range actual.([]string) {
+			if !reflect.DeepEqual(v, expected[i]) {
+				return
+			}
 		}
 	}
 
