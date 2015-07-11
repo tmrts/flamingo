@@ -5,9 +5,14 @@ func GetMetaData() Digest {
 	defer close(mch)
 
 	go func(mch chan Digest) {
-		for t, p := range SupportedProviders {
+		for _, p := range SupportedProviders {
 			go func(c chan Digest) {
-				c <- p.Metadata("latest").Digest()
+				m, err := p.MetaData("latest")
+				if err != nil {
+					return
+				}
+
+				c <- m.Digest()
 			}(mch)
 		}
 	}(mch)

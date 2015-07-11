@@ -1,6 +1,10 @@
 package metadata
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/tmrts/flamingo/pkg/request"
+)
 
 type URL string
 

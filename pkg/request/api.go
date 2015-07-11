@@ -1,25 +1,25 @@
 package request
 
 func Get(url string, params ...Parameter) (*Response, error) {
-	return request("GET", url, params)
+	return Perform("GET", url, params...)
 }
 
-func Put(string, ...Parameter) (*Response, error) {
-	return request("PUT", url, params)
+func Put(url string, params ...Parameter) (*Response, error) {
+	return Perform("PUT", url, params...)
 }
 
-func Post(string, ...Parameter) (*Response, error) {
-	return request("POST", url, params)
+func Post(url string, params ...Parameter) (*Response, error) {
+	return Perform("POST", url, params...)
 }
 
-func Head(string, ...Parameter) (*Response, error) {
-	return request("HEAD", url, params)
+func Head(url string, params ...Parameter) (*Response, error) {
+	return Perform("HEAD", url, params...)
 }
 
-func Delete(string, ...Parameter) (*Response, error) {
-	return request("DELETE", url, params)
+func Delete(url string, params ...Parameter) (*Response, error) {
+	return Perform("DELETE", url, params...)
 }
 
-func Options(string, ...Parameter) (*Response, error) {
-	return request("OPTIONS", url, params)
+func Options(url string, params ...Parameter) (*Response, error) {
+	return Perform("OPTIONS", url, params...)
 }

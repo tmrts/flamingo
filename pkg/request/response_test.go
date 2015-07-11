@@ -7,15 +7,15 @@ import (
 	. "github.com/smartystreets/goconvey/convey"
 	. "github.com/tmrts/flamingo/pkg/util/testutil"
 
-	"github.com/tmrts/flamingo/pkg/mock"
-	"github.com/tmrts/flamingo/pkg/rest"
+	"github.com/tmrts/flamingo/pkg/request"
+	"github.com/tmrts/flamingo/pkg/util/mock"
 )
 
 func TestTextToJSON(t *testing.T) {
 	Convey("Given a RESTful response", t, func() {
 		mockBody := mock.NewReadCloser("{\"response\": [1,2,3]}")
 
-		r := &rest.Response{
+		r := &request.Response{
 			&http.Response{Body: mockBody},
 		}
 
