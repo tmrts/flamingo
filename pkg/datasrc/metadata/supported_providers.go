@@ -1,15 +1,15 @@
 package metadata
 
 var SupportedProviders = map[ProviderType]Source{
-	GCE: Provider{
+	GCE: &Provider{
 		Name:              "Google Compute Engine",
-		SupportedVersions: []Version{"v1"},
+		SupportedVersions: map[Version]bool{"v1": true},
 
 		URL: "http://metadata.google.internal/computeMetadata/%s/instance/?recursive=true",
 	},
-	EC2: Provider{
+	EC2: &Provider{
 		Name:              "Amazon Elastic Compute Cloud",
-		SupportedVersions: []Version{"latest"},
+		SupportedVersions: map[Version]bool{"latest": true},
 
 		URL: "http://169.254.169.254/%s/meta-data/",
 	},
