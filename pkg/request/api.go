@@ -1,4 +1,4 @@
-package rest
+package request
 
 func Get(url string, params ...Parameter) (*Response, error) {
 	return request("GET", url, params)

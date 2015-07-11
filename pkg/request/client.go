@@ -1,4 +1,4 @@
-package rest
+package request
 
 import "net/http"
 

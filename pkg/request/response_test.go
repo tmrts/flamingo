@@ -1,4 +1,4 @@
-package rest_test
+package request_test
 
 import (
 	"net/http"
