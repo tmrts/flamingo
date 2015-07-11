@@ -1,58 +1,70 @@
 package metadata
 
-import "net"
+import (
+	"net"
+
+	"github.com/tmrts/flamingo/pkg/sys/ssh"
+)
 
 // GCEv1 represented the v1 compute meta-data provided by google compute engine
 // Uninteresting fields are unexported.
 type GCEv1 struct {
-	iD          float64
-	image       string
-	Hostname    string
-	description string
-	cpuPlatform string
-	machineType string
-	zone        string
+	Instance struct {
+		iD          float64
+		image       string
+		Hostname    string
+		description string
+		cpuPlatform string
+		machineType string
+		zone        string
 
-	maintenanceEvent string
-	scheduling       struct {
-		AutomaticRestart  string
-		OnHostMaintenance string
-	}
+		maintenanceEvent string
+		scheduling       struct {
+			AutomaticRestart  string
+			OnHostMaintenance string
+		}
 
-	virtualClock struct {
-		DriftToken string
-	}
+		virtualClock struct {
+			DriftToken string
+		}
 
-	NetworkInterfaces []struct {
-		IP           net.IP
-		Network      string
-		ForwardedIPs []net.IP
+		NetworkInterfaces []struct {
+			IP           net.IP
+			Network      string
+			ForwardedIPs []net.IP
 
-		AccessConfigs []struct {
+			AccessConfigs []struct {
+				Type       string
+				ExternalIP net.IP
+			}
+		}
+
+		Disks []struct {
+			Index int
+
 			Type       string
-			ExternalIP net.IP
+			DeviceName string
+			Mode       string
+		}
+
+		attributes map[string]interface{}
+
+		tags []string
+	}
+
+	Project struct {
+		ID         float64
+		Attributes struct {
+			SSHKeys []ssh.Key
 		}
 	}
-
-	Disks []struct {
-		Index int
-
-		Type       string
-		DeviceName string
-		Mode       string
-	}
-
-	attributes map[string]interface{}
-
-	tags []string
 }
 
 // Digest extracts the important parts of meta-data and returns it.
 func (metadata *GCEv1) Digest() Digest {
-	interfaces := []Interface{}
-
-	for _, ifc := range metadata.NetworkInterfaces {
-		i := Interface{
+	interfaces := []NetworkInterface{}
+	for _, ifc := range metadata.Instance.NetworkInterfaces {
+		i := NetworkInterface{
 			NetworkName: ifc.Network,
 			PrivateIP:   ifc.IP,
 			PublicIPs:   []net.IP{},
@@ -66,7 +78,9 @@ func (metadata *GCEv1) Digest() Digest {
 	}
 
 	return Digest{
-		Hostname:          metadata.Hostname,
+		Hostname: metadata.Instance.Hostname,
+		SSHKeys:  metadata.Project.Attributes.SSHKeys,
+
 		NetworkInterfaces: interfaces,
 	}
 }
