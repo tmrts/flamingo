@@ -16,10 +16,12 @@ const (
 	AuthorizedKeysPath = ".ssh/authorized_keys"
 )
 
+type Key []byte
+
 // Verify uses ssh-keygen utility to verify an SSH key.
 // It returns an error if a problem occurs or the key is invalid.
 // The caller should diagnose the error for more information.
-func Verify(key []byte) error {
+func Verify(key Key) error {
 	tmpFile := &context.TempFile{
 		Content: string(key),
 	}
@@ -56,7 +58,7 @@ func InitializeFor(owner *user.User) error {
 	return file.EnsureExists(userAuthorizedKeysPath, 0600, userID, groupID)
 }
 
-func AuthorizeKeys(authorizedKeysFile *os.File, publicKeys ...[]byte) error {
+func AuthorizeKeys(authorizedKeysFile *os.File, publicKeys ...Key) error {
 	var keys []string
 	for _, key := range publicKeys {
 		keys = append(keys, string(key))
