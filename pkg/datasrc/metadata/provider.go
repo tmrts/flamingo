@@ -5,7 +5,7 @@ import "fmt"
 type URL string
 
 func (u URL) WithVersion(v Version) string {
-	return fmt.Sprintf(u, v)
+	return fmt.Sprintf(string(u), v)
 }
 
 type ProviderType string
@@ -21,7 +21,7 @@ type Source interface {
 
 type Provider struct {
 	Name              string
-	SupportedVersions []Version
+	SupportedVersions map[Version]bool
 
 	URL URL
 }
@@ -32,15 +32,21 @@ func (p *Provider) MetaData(v Version) (Interface, error) {
 	}
 
 	url := p.URL.WithVersion(v)
-	metadata := request.Get(url, request.Header("Metadata-Flavor", "Google"))
+	metadata, err := request.Get(url, request.Header("Metadata-Flavor", "Google"))
+	if err != nil {
+		return nil, err
+	}
 
 	/*
 	 *switch Provider {
 	 *case "GoogleComputeEngine":
 	 */
-	var gceMetaData GCEv1
+	var gceMetaData *GCEv1
 
-	metadata.JSON(&gceMetaData)
+	err = metadata.JSON(gceMetaData)
+	if err != nil {
+		return nil, err
+	}
 
-	return gceMetaData
+	return gceMetaData, nil
 }
