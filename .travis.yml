@@ -12,6 +12,6 @@ install:
     - go get github.com/mattn/goveralls
 
 script:
-    - godep go test -v ${TRAVIS_BUILD_DIR}/...
-    - godep go test -v ${TRAVIS_BUILD_DIR}/... -race
+    - godep go test -v ${TRAVIS_BUILD_DIR}/pkg/...
+    - godep go test -v ${TRAVIS_BUILD_DIR}/pkg/... -race
 
