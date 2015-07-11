@@ -5,17 +5,6 @@ import (
 	"net"
 )
 
-type Provider string
-
-const (
-	GCE = "GoogleComputeEngine"
-	EC2 = "ElasticComputeCloud"
-)
-
-type Service interface {
-	Get(Version) Interface
-}
-
 type Version string
 
 type Interface interface {
