@@ -41,7 +41,7 @@ func ShouldSetEqual(actual interface{}, expected ...interface{}) (msg string) {
 }
 
 func ShouldConsistOf(actual interface{}, expected ...interface{}) (msg string) {
-	msg = fmt.Sprintf("Expected:\t%v\nActual:\t%v\n(Should consist of the given elements)", expected, actual)
+	msg = fmt.Sprintf("Expected:\n%q\nActual:\n%q\n(Should consist of the given elements)", expected, actual)
 
 	switch actual.(type) {
 	case []int:
