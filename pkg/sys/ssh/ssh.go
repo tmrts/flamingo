@@ -18,6 +18,10 @@ const (
 
 type Key []byte
 
+type KeyPair struct {
+	Public, Private Key
+}
+
 // Verify uses ssh-keygen utility to verify an SSH key.
 // It returns an error if a problem occurs or the key is invalid.
 // The caller should diagnose the error for more information.
