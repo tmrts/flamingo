@@ -12,7 +12,7 @@ type ClientImplementation struct {
 	*http.Client
 }
 
-func (c *ClientImplementation) perform(r *Request) (*Response, error) {
+func (c *ClientImplementation) Perform(r *Request) (*Response, error) {
 	req := r.Normalize()
 
 	resp, err := c.Do(req)
@@ -34,5 +34,5 @@ func Perform(method, url string, params ...Parameter) (*Response, error) {
 		parametrize(r)
 	}
 
-	return DefaultClient.perform(r)
+	return DefaultClient.Perform(r)
 }

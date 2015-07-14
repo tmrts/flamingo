@@ -8,6 +8,8 @@ type Request struct {
 	Headers http.Header
 }
 
+// Normalize converts request.Request to http.Request
+// Currently request pkg is a wrapper for http pkg
 func (r *Request) Normalize() *http.Request {
 	req, err := http.NewRequest(r.Method, r.URL, nil)
 	if err != nil {
@@ -19,6 +21,7 @@ func (r *Request) Normalize() *http.Request {
 	return req
 }
 
+// Parameter is an optional argument expected by the request API
 type Parameter func(*Request)
 
 func Header(key string, values ...string) Parameter {
