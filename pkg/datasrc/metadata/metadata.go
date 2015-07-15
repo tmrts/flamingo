@@ -7,8 +7,6 @@ import (
 	"github.com/tmrts/flamingo/pkg/sys/ssh"
 )
 
-type Version string
-
 type Interface interface {
 	Digest() Digest
 }
@@ -17,7 +15,10 @@ type Interface interface {
 type Digest struct {
 	Hostname string
 
-	NetworkInterfaces []NetworkInterface
+	PublicIPv4  net.IP
+	PublicIPv6  net.IP
+	PrivateIPv4 net.IP
+	PrivateIPv6 net.IP
 
 	SSHKeys []ssh.Key
 }
