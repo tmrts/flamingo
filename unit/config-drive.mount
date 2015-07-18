@@ -1,0 +1,7 @@
+[Unit]
+Wants=config-drive.path
+Before=config-drive.service
+
+[Mount]
+Where=/media/configdrive
+Options=ro
