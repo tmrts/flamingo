@@ -1,6 +1,6 @@
-sudo: false
-
 language: go
+
+sudo: false
 
 matrix:
     include:
@@ -10,8 +10,3 @@ matrix:
 install:
     - go get github.com/tools/godep
     - go get github.com/mattn/goveralls
-
-script:
-    - godep go test -v ${TRAVIS_BUILD_DIR}/pkg/...
-    - godep go test -v ${TRAVIS_BUILD_DIR}/pkg/... -race
-
