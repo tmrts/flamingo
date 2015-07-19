@@ -64,16 +64,14 @@ will be available soon. In the meanwhile API is volatile, so expect changes!
 ## Discussions
 In the meanwhile if you'd like to share your opinions, learn more,
 or contribute please feel free to open an issue, mail to [centos-devel], [atomic],
-user-list or come to [#atomic] [#centos-devel] IRC channels to have a chat.
+user-list or come to #[atomic](irc://irc.freenode.net/#atomic-devel) and #[centos-devel](irc://irc.freenode.net/#centos-devel) channels to have a chat.
 
 [Introducing Flamingo]: http://tmrts.com/post/flamingo/
-[cloud-init]: https://cloudinit.readthedocs.org/en/latest/
-[Kubernetes]: https://kubernetes.io
-[Atomic Host]: https://projectatomic.io
+[cloud-init]: http://cloudinit.readthedocs.org/en/latest/
+[Kubernetes]: http://kubernetes.io
+[Atomic Host]: http://projectatomic.io
 [Fedora]: http://www.projectatomic.io/download/
 [CentOS]: http://www.projectatomic.io/download/
 [RHEL]: http://www.projectatomic.io/download/
-[centos-devel]: lists.centos.org/mailman/listinfo/centos-devel
+[centos-devel]: https://lists.centos.org/mailman/listinfo/centos-devel
 [atomic]: https://lists.projectatomic.io/mailman/listinfo/atomic
-[#centos-devel]: https://lists.projectatomic.io/mailman/listinfo/centos-devel
-[#atomic]: irc://irc.freenode.net/#atomic
