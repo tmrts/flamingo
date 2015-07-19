@@ -11,6 +11,7 @@ import (
 
 	"github.com/tmrts/flamingo/pkg/context"
 	"github.com/tmrts/flamingo/pkg/sys"
+	"github.com/tmrts/flamingo/pkg/sys/nss"
 	"github.com/tmrts/flamingo/pkg/sys/ssh"
 )
 
@@ -25,6 +26,7 @@ func TestSSHKeyVerification(t *testing.T) {
 					So(err, ShouldNotBeNil)
 				})
 			})
+
 			Convey("For a malformed SSH key", func() {
 				key := []byte("GIBBERISH")
 
@@ -33,6 +35,7 @@ func TestSSHKeyVerification(t *testing.T) {
 					So(err, ShouldNotBeNil)
 				})
 			})
+
 			Convey("For a valid rsa SSH public key", func() {
 				key, err := ioutil.ReadFile("test_keys/test_rsa.pub")
 				So(err, ShouldBeNil)
@@ -44,6 +47,7 @@ func TestSSHKeyVerification(t *testing.T) {
 					So(err, ShouldBeNil)
 				})
 			})
+
 			Convey("For a valid rsa1 SSH public key", func() {
 				key, err := ioutil.ReadFile("test_keys/test_rsa.pub")
 				So(err, ShouldBeNil)
@@ -55,6 +59,7 @@ func TestSSHKeyVerification(t *testing.T) {
 					So(err, ShouldBeNil)
 				})
 			})
+
 			Convey("For a valid dsa SSH public key", func() {
 				key, err := ioutil.ReadFile("test_keys/test_rsa.pub")
 				So(err, ShouldBeNil)
@@ -66,6 +71,7 @@ func TestSSHKeyVerification(t *testing.T) {
 					So(err, ShouldBeNil)
 				})
 			})
+
 			Convey("For a valid ecdsa SSH public key", func() {
 				key, err := ioutil.ReadFile("test_keys/test_rsa.pub")
 				So(err, ShouldBeNil)
@@ -85,15 +91,16 @@ func TestSSHDirectoryStructureInitialization(t *testing.T) {
 	Convey("Given a user", t, func() {
 		fakeHomeDir, err := ioutil.TempDir("", "flamingo-fakeuser")
 		So(err, ShouldBeNil)
+
 		defer os.RemoveAll(fakeHomeDir)
 
-		curUsr, err := user.Current()
+		curUser, err := nss.CurrentUser()
 		So(err, ShouldBeNil)
 
 		fakeUser := &user.User{
-			Uid:      curUsr.Uid,
-			Gid:      curUsr.Gid,
-			Username: curUsr.Username,
+			Uid:      curUser.Uid,
+			Gid:      curUser.Gid,
+			Username: curUser.Username,
 			Name:     "FakeUser",
 			HomeDir:  fakeHomeDir,
 		}
