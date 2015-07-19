@@ -1,19 +1,23 @@
 - [x] Docker Test Environment
-    - [X] Atomic Host
-    - [x] Fedora
     - [x] CentOS
+    - [x] Fedora
 - [X] User & Password Management
 - [X] Running Custom Scripts
 - [X] SSH Configuration
 - [X] Manage Services at Boot
-- [X] Manage and Modify IPtables/Netfilter Rules
-- [ ] **RESTful Client**
-- [ ] Tool Configuration
-    - [ ] Command Line
-    - [ ] User-Data
+- [X] Manage and Modify IPtables/Filter Rules
+- [X] RESTful Client
+- [ ] *Configuration*
     - [ ] Meta-Data
-- [ ] Packaging
+    - [ ] Cloud-Config
+    - [ ] Config-Drive
+    - [ ] Integration with Systemd (using config-drive.mount instead of manual checks)
+- [ ] *Test Images*
 - [ ] Atomic Host Package Configuration
 - [ ] Integration Tests
+    - [ ] OpenStack
+    - [ ] Amazon EC2
+    - [ ] Google Compute Engine
+    - [ ] OpenNebula
 - [ ] Disk Volume Management
 - [ ] Plug-in Layer
