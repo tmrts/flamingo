@@ -5,17 +5,17 @@ import "net/http"
 var DefaultClient = ClientImplementation{http.DefaultClient}
 
 type Client interface {
-	Perform(string, ...Parameter) (*Response, error)
+	Get(string, ...Parameter) (*Response, error)
 }
 
 type ClientImplementation struct {
-	*http.Client
+	HTTPClient *http.Client
 }
 
-func (c *ClientImplementation) Perform(r *Request) (*Response, error) {
+func (c *ClientImplementation) performRequest(r *Request) (*Response, error) {
 	req := r.Normalize()
 
-	resp, err := c.Do(req)
+	resp, err := c.HTTPClient.Do(req)
 	if err != nil {
 		return nil, err
 	}
@@ -23,16 +23,16 @@ func (c *ClientImplementation) Perform(r *Request) (*Response, error) {
 	return &Response{resp}, nil
 }
 
-func Perform(method, url string, params ...Parameter) (*Response, error) {
-	r := &Request{
+func (c *ClientImplementation) Perform(method, url string, params ...Parameter) (*Response, error) {
+	req := &Request{
 		URL:     url,
 		Method:  method,
 		Headers: http.Header{},
 	}
 
 	for _, parametrize := range params {
-		parametrize(r)
+		parametrize(req)
 	}
 
-	return DefaultClient.Perform(r)
+	return c.performRequest(req)
 }
