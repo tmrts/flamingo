@@ -1,8 +1,9 @@
 package request_test
 
 import (
-	"fmt"
+	"io/ioutil"
 	"net/http"
+	"net/http/httptest"
 	"testing"
 
 	. "github.com/smartystreets/goconvey/convey"
@@ -13,30 +14,25 @@ import (
 type mockHandler struct{}
 
 func (m mockHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("{'isJSON': true}"))
+	buf, _ := ioutil.ReadFile("test_data/some.json")
+	w.Write(buf)
 }
 
 func TestRESTfulClient(t *testing.T) {
 	Convey("Given a URL and a REST client", t, func() {
-		localServer := &http.Server{
-			Handler: mockHandler{},
-		}
-		localServer.ListenAndServe()
+		server := httptest.NewServer(mockHandler{})
 
-		url := localServer.Addr
-
-		fmt.Printf("url %\n", url)
-		//client := rest.DefaultClient
 		Convey("When the client requests the contents", func() {
-			response, err := request.Get(url)
+			response, err := request.Get(server.URL)
 			So(err, ShouldBeNil)
 
 			Convey("Then the response should be the raw contents of the response", func() {
-				var json interface{}
-				err := response.JSON(&json)
+				var data map[string]interface{}
+
+				err := response.JSON(&data)
 				So(err, ShouldBeNil)
 
-				So(json.isJSON, ShouldBeTrue)
+				So(data["isJSON"], ShouldBeTrue)
 			})
 		})
 	})
