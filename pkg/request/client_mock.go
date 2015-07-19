@@ -4,21 +4,21 @@ type MockClient struct {
 	Client
 
 	Method     chan string
-	URL        chan []string
+	URL        chan string
 	Parameters chan []Parameter
 
-	OutResponse *Response
+	OutResponse chan *Response
 	OutError    error
 }
 
-func NewMockExecutor(r *Response, err error) *MockExecutor {
-	return &MockExecutor{
+func NewMockClient(l int) *MockClient {
+	return &MockClient{
 		Method:     make(chan string, 1),
 		URL:        make(chan string, 1),
 		Parameters: make(chan []Parameter, 1),
 
-		OutResponse: r,
-		OutError:    err,
+		OutResponse: make(chan *Response, l),
+		OutError:    nil,
 	}
 }
 
@@ -27,5 +27,5 @@ func (mc *MockClient) Perform(method, url string, params ...Parameter) (*Respons
 	mc.URL <- url
 	mc.Parameters <- params
 
-	return mc.OutResponse, mc.OutError
+	return <-mc.OutResponse, mc.OutError
 }
