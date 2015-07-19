@@ -14,6 +14,8 @@
     - [ ] Integration with Systemd (using config-drive.mount instead of manual checks)
 - [ ] *Test Images*
 - [ ] Atomic Host Package Configuration
+    - [ ] rpm-ostree features
+    - [ ] Example configurations
 - [ ] Integration Tests
     - [ ] OpenStack
     - [ ] Amazon EC2
