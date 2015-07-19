@@ -2,16 +2,17 @@
 
 ![Flamingo Logo](/logo.png)
 
-Flamingo is a lightweight contextualization tool that aims to handle
+*Flamingo* is a lightweight contextualization tool that aims to handle
 initialization of cloud instances.
 
-It is meant to be a replacement for cloud-init in Atomic Host, a lightweight 
+It is meant to be a replacement for [cloud-init] in [Atomic Host], a lightweight 
 operating system designed to run applications in Docker containers with 
-orchestration capabilities (Kubernetes). It has 3 different 
-flavors; Fedora, RHEL, and CentOS.
+orchestration capabilities ([Kubernetes]). It has 3 different 
+flavors; [Fedora], [RHEL], and [CentOS].
+
+For more details please check [Introducing Flamingo]
 
 # Goals
-
 The aim of this project is to create a fast, documented, extensible
 tool to use
 
@@ -32,15 +33,14 @@ maintainer.
   It provides the necessary tooling for the job. It doesn't have long 
   dependency chains like interpreted languages and it is fast.
 
-- Flamingo will essentially be a single binary coupled with all of its
+- *Flamingo* will essentially be a single binary coupled with all of its
   dependencies. In addition, cloud images will be smaller as well.
 
-- Testability, Documentation and Extensibility is heavily emphasized in Flamingo.
+- Testability, Documentation and Extensibility is heavily emphasized in *Flamingo*.
 
 # Status
-
-Flamingo is in **Alpha** stage at the moment. Build images containing
-Flamingo as the default contextualization tool (swapped with cloud-init)
+*Flamingo* is in **Alpha** stage at the moment. Build images containing
+*Flamingo* as the default contextualization tool (swapped with cloud-init)
 will be available soon. In the meanwhile API is volatile, so expect changes!
 
 ## What has been done
@@ -58,11 +58,22 @@ will be available soon. In the meanwhile API is volatile, so expect changes!
 - Meta-Data
 - Cloud-Config
 - Config-Drive
-- Integration with Systemd (using config-drive.mount instead of manual checks)
+- Integration with systemd (using config-drive.mount instead of manual checks)
 - Test Images
 
-# Discussions
-
+## Discussions
 In the meanwhile if you'd like to share your opinions, learn more,
-or contribute please feel free to open an issue, mail to centos-devel, atomic,
-user-list or come to #atomic #centos-devel IRC channels to have a chat.
+or contribute please feel free to open an issue, mail to [centos-devel], [atomic],
+user-list or come to [#atomic] [#centos-devel] IRC channels to have a chat.
+
+[Introducing Flamingo]: http://tmrts.com/post/flamingo/
+[cloud-init]: https://cloudinit.readthedocs.org/en/latest/
+[Kubernetes]: https://kubernetes.io
+[Atomic Host]: https://projectatomic.io
+[Fedora]: http://www.projectatomic.io/download/
+[CentOS]: http://www.projectatomic.io/download/
+[RHEL]: http://www.projectatomic.io/download/
+[centos-devel]: lists.centos.org/mailman/listinfo/centos-devel
+[atomic]: https://lists.projectatomic.io/mailman/listinfo/atomic
+[#centos-devel]: https://lists.projectatomic.io/mailman/listinfo/centos-devel
+[#atomic]: irc://irc.freenode.net/#atomic
