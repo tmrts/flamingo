@@ -9,7 +9,6 @@ type GroupShadowEntry struct {
 	Members      []string
 }
 
-// Parses NSS GroupShadowDatabase Entry.
 func parseGroupShadowEntry(groupEntry string) *GroupShadowEntry {
 	groupInfo := strings.Split(groupEntry, ":")
 
@@ -24,9 +23,10 @@ func parseGroupShadowEntry(groupEntry string) *GroupShadowEntry {
 	}
 }
 
-// GetGroup queries the NSS Group Shadow Database.
-func GetGroupShadowEntry(s Service, key string) (*GroupShadowEntry, error) {
-	shadowEntry, err := s.GetEntryFrom(GroupShadowDatabase, key)
+// GetGroup queries the Name Switch Service 'gshadow' Database.
+// It returns the parsed 'gshadow' entry belonging to given group key.
+func GetGroupShadowEntry(s Service, groupKey string) (*GroupShadowEntry, error) {
+	shadowEntry, err := s.GetEntryFrom(GroupShadowDatabase, groupKey)
 	if err != nil {
 		return nil, err
 	}

@@ -5,6 +5,8 @@ import (
 	"strings"
 )
 
+// GroupEntry is the representation of Name Switch Service
+// 'group' database entry fields.
 type GroupEntry struct {
 	GroupName     string
 	GID           int
@@ -36,9 +38,11 @@ func parseGroupEntry(groupEntry string) *GroupEntry {
 	}
 }
 
-// GetGroup queries the NSS Group Database.
-func GetGroupEntry(s Service, key string) (*GroupEntry, error) {
-	entry, err := s.GetEntryFrom(GroupDatabase, key)
+// GetGroup queries the Name Switch Service 'group' Database for
+// a given group key. Group key is usually the name of that group.
+// It returns the parsed group entry.
+func GetGroupEntry(s Service, groupKey string) (*GroupEntry, error) {
+	entry, err := s.GetEntryFrom(GroupDatabase, groupKey)
 	if err != nil {
 		return nil, err
 	}
