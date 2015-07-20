@@ -3,14 +3,13 @@ package metadata
 import (
 	"time"
 
+	"github.com/tmrts/flamingo/pkg/datasrc/metadata"
 	"github.com/tmrts/flamingo/pkg/datasrc/metadata/gce"
 	"github.com/tmrts/flamingo/pkg/request"
 )
 
-type ProviderType string
-
-// List of currently supported providers
-var SupportedProviders = map[string]Provider{
+// SupportedProviders is the table of supported meta-data sources.
+var SupportedProviders = map[string]metadata.Provider{
 	"GCE":       gce.MetadataService,
 	"Openstack": configdrive.Mount,
 	/*
@@ -33,7 +32,7 @@ var SupportedProviders = map[string]Provider{
 // Get queries metadata services and returns the available metadata digest
 // Since there will be only one metadata service operational (or multiple ones returning the same),
 // it queries each known service and returns at timeout or a successful response.
-func Get(timeout time.Duration) (digest Digest) {
+func Get(timeout time.Duration) (digest metadata.Digest) {
 	if configdrive.Available() {
 		return configdrive.Metadata()
 	}
@@ -44,12 +43,12 @@ func Get(timeout time.Duration) (digest Digest) {
 	go func(mdchan chan Digest) {
 		for _, p := range SupportedProviders {
 			go func(c chan Digest) {
-				metadata, err := p.Metadata(request.DefaultClient)
+				md, err := p.Metadata(request.DefaultClient)
 				if err != nil {
 					return
 				}
 
-				c <- Digest()
+				c <- md.Digest()
 			}(mdchan)
 		}
 

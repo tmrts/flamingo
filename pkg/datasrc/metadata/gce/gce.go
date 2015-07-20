@@ -6,24 +6,26 @@ import (
 )
 
 const (
-	projectMetadataURL  URLFormat = "http://metadata.google.internal/computeMetadata/%s/project/?recursive=true"
-	instanceMetadataURL URLFormat = "http://metadata.google.internal/computeMetadata/%s/instance/?recursive=true"
+	MetadataURL metadata.FormatURL = "http://metadata.google.internal/computeMetadata/%s/%s/?recursive=true"
 )
 
 type MetadataService struct {
-	SupportedVersions map[Version]bool
+	URL metadata.FormatURL
 }
 
-func (s *MetadataService) Metadata(c request.Client) (metadata.Interface, error) {
+func (s *MetadataService) Metadata() (metadata.Interface, error) {
+	// Currently only supported metadata version is "v1"
+	version := "v1"
 	/*
 	 *if _, ok := s.SupportedVersions[v]; ok != true {
 	 *    return nil, fmt.Errorf("metadata: version %v for %v is not supported", v, s.Name)
 	 *}
 	 */
 
-	var m *Metadata
+	var m Metadata
 
-	responce, err := request.Get(instanceMetadataURL.WithVersion("v1"), request.Header("Metadata-Flavor", "Google"))
+	instanceUrl := s.URL.Fill(version, "instance")
+	response, err := request.Get(instanceUrl, request.Header("Metadata-Flavor", "Google"))
 	if err != nil {
 		return nil, err
 	}
@@ -33,8 +35,8 @@ func (s *MetadataService) Metadata(c request.Client) (metadata.Interface, error)
 		return nil, err
 	}
 
-	pu := projectMetadataURL.WithVersion(v)
-	responce, err := request.Get(projectMetadataURL.WithVersion("v1"), request.Header("Metadata-Flavor", "Google"))
+	projectUrl := s.URL.Fill(version, "project")
+	response, err = request.Get(projectUrl, request.Header("Metadata-Flavor", "Google"))
 	if err != nil {
 		return nil, err
 	}
@@ -44,5 +46,5 @@ func (s *MetadataService) Metadata(c request.Client) (metadata.Interface, error)
 		return nil, err
 	}
 
-	return m, nil
+	return &m, nil
 }

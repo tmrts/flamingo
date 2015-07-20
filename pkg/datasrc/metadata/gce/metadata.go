@@ -7,8 +7,8 @@ import (
 	"github.com/tmrts/flamingo/pkg/sys/ssh"
 )
 
-// Metadata represents the v1 compute meta-data provided by google compute engine
-// Uninteresting fields are not exported.
+// Metadata represents the version "v1" compute meta-data provided
+// by Google Compute Engine. Uninteresting fields are not exported.
 type Metadata struct {
 	Instance struct {
 		iD          float64
@@ -62,10 +62,10 @@ type Metadata struct {
 }
 
 // Digest extracts the important parts of meta-data and returns it.
-func (md *Metadata) Digest() Digest {
-	interfaces := []NetworkInterface{}
+func (md *Metadata) Digest() metadata.Digest {
+	interfaces := []metadata.NetworkInterface{}
 	for _, ifc := range md.Instance.NetworkInterfaces {
-		i := NetworkInterface{
+		i := metadata.NetworkInterface{
 			NetworkName: ifc.Network,
 			PrivateIP:   ifc.IP,
 			PublicIPs:   []net.IP{},
@@ -82,7 +82,6 @@ func (md *Metadata) Digest() Digest {
 		Hostname: md.Instance.Hostname,
 		SSHKeys:  md.Project.Attributes.SSHKeys,
 
-		PublicIPv4:  interfaces[0].PublicIPs[0],
-		PrivateIPv4: interfaces[0].PrivateIP,
+		NetworkInterfaces: interfaces,
 	}
 }
