@@ -22,7 +22,10 @@ type Response struct {
 }
 
 func (r *Response) JSON(f interface{}) error {
-	buf, _ := ioutil.ReadAll(r.Body)
+	buf, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		return err
+	}
 	defer r.Body.Close()
 
 	return json.Unmarshal(buf, &f)
