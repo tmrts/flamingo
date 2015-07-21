@@ -8,20 +8,24 @@ import (
 )
 
 type User struct {
-	Name            string
-	PasswordHash    string `flag:"password"`
-	GECOS           string `flag:"comment"`
-	HomeDir         string `flag:"home"`
-	DefaultShell    string `flag:"shell"`
-	IsSystemAccount bool   `flag:"system"`
+	Name            string `yaml:"name"`
+	PasswordHash    string `yaml:"passwd" flag:"password"`
+	GECOS           string `yaml:"gecos" flag:"comment"`
+	HomeDir         string `yaml:"homedir" flag:"home"`
+	DefaultShell    string `yaml:"shell" flag:"shell"`
+	IsSystemAccount bool   `yaml:"system" flag:"system"`
 
 	UID             string   `flag:"uid"`
-	GID             string   `flag:"gid"`
-	SecondaryGroups []string `flag:"groups"`
+	GID             string   `yaml:"primary-group" flag:"gid"`
+	SecondaryGroups []string `yaml:"groups" flag:"groups"`
 
-	CreateHomeDir               bool   `flag:"no-create-home"`
+	// TODO(tmrts): add --default flag
+	IsInactive                  bool   `yaml:"inactive" flag:"no-create-home"`
+	CreateHomeDir               bool   `yaml:"no-create-home" flag:"no-create-home"`
+	CreateUserGroupWithSameName bool   `flag:"user-group"`
+	ExpireDate                  string `yaml:"expiredate" flag:"expiredate"`
+	SELinuxUser                 string `yaml:"selinux-user" flag:"selinux-user"`
 	DirectoryTemplate           string `flag:"skel"`
-	CreateUserGroupWithSameName string `flag:"user-group"`
 }
 
 type Group struct {
@@ -37,6 +41,8 @@ type Manager interface {
 
 	SetUserPassword(string, string) error
 	SetGroupPassword(string, string) error
+
+	AddUserToGroup(string, string) error
 }
 
 type ManagerImplementation struct {
@@ -76,6 +82,12 @@ func (mi *ManagerImplementation) CreateGroup(grp Group) error {
 func (mi *ManagerImplementation) SetGroupPassword(groupName, passwordHash string) error {
 	// TODO(tmrts): pass the password hash using a stdin pipe.
 	_, err := mi.Executor.Execute("groupmod", groupName, "--password="+passwordHash)
+
+	return err
+}
+
+func (mi *ManagerImplementation) AddUserToGroup(userName, groupName string) error {
+	_, err := mi.Executor.Execute("usermod", userName, "--append", "--groups="+groupName)
 
 	return err
 }
