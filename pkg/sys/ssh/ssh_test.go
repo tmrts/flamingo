@@ -94,7 +94,7 @@ func TestSSHDirectoryStructureInitialization(t *testing.T) {
 
 		defer os.RemoveAll(fakeHomeDir)
 
-		curUser, err := nss.CurrentUser()
+		curUser, err := nss.GetCurrentUser()
 		So(err, ShouldBeNil)
 
 		fakeUser := &user.User{
@@ -109,10 +109,10 @@ func TestSSHDirectoryStructureInitialization(t *testing.T) {
 			err := ssh.InitializeFor(fakeUser)
 			So(err, ShouldBeNil)
 
-			_, err = os.Open(filepath.Join(fakeHomeDir, ".ssh"))
+			_, err = os.Open(filepath.Join(fakeHomeDir, ssh.DirPath))
 			So(err, ShouldBeNil)
 
-			_, err = os.Open(filepath.Join(fakeHomeDir, ".ssh/authorized_keys"))
+			_, err = os.Open(filepath.Join(fakeHomeDir, ssh.AuthorizedKeysPath))
 			So(err, ShouldBeNil)
 		})
 	})
@@ -139,6 +139,7 @@ func TestSSHKeyAuthorization(t *testing.T) {
 				}
 				f.Close()
 
+				// Checks whether the keys are authorized.
 				_, err = sys.DefaultExecutor.Execute("ssh-keygen", "-l", "-f", f.Name())
 
 				return err
