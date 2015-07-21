@@ -9,6 +9,10 @@ import (
 
 var DefaultExecutor = &Linux{}
 
+func Execute(cmd string, args ...string) (string, error) {
+	return DefaultExecutor.Execute(cmd, args...)
+}
+
 type Executor interface {
 	Execute(string, ...string) (string, error)
 }
