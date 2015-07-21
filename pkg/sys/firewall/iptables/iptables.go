@@ -3,6 +3,7 @@ package iptables
 import (
 	"fmt"
 	"os/exec"
+	"strings"
 
 	"github.com/tmrts/flamingo/pkg/sys"
 	"github.com/tmrts/flamingo/pkg/sys/firewall"
@@ -46,6 +47,10 @@ type Rule struct {
 
 func (r *Rule) FlagForm() []string {
 	return util.GetFlagFormOfStruct(*r)
+}
+
+func (r *Rule) String() string {
+	return strings.Join(r.FlagForm(), " ")
 }
 
 func (impl *Implementation) CheckDependencies() error {
