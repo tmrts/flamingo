@@ -16,6 +16,10 @@ type Interface interface {
 	Digest() Digest
 }
 
+type Provider interface {
+	FetchMetadata() (*Digest, error)
+}
+
 // Digest contains the parts of a meta-data object that are
 // used by Flamingo for contextualization of the instance.
 type Digest struct {
@@ -23,14 +27,14 @@ type Digest struct {
 
 	NetworkInterfaces []NetworkInterface
 
-	SSHKeys []ssh.Key
+	SSHKeys map[string][]ssh.Key
 }
 
-func (d Digest) String() string {
+func (d *Digest) String() string {
 	return fmt.Sprintf("\nHostname: %v\nInterfaces: %v\n", d.Hostname, d.NetworkInterfaces)
 }
 
-func (d Digest) PrimaryNetworkInterface() *NetworkInterface {
+func (d *Digest) PrimaryNetworkInterface() *NetworkInterface {
 	return &d.NetworkInterfaces[0]
 }
 
