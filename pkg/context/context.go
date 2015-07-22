@@ -13,6 +13,30 @@ type Interface interface {
 	Use(interface{}) error
 }
 
+type File struct {
+	source *os.File
+
+	Path        string
+	Permissions os.FileMode
+}
+
+func (f *File) Enter() error {
+	src, err := os.OpenFile(f.Path, os.O_WRONLY, f.Permissions)
+	f.source = src
+	return err
+}
+
+func (f *File) Exit() error {
+	return f.source.Close()
+}
+
+// Expects func(*os.File) error
+func (f *File) Use(fn interface{}) error {
+	closure := fn.(func(*os.File) error)
+
+	return closure(f.source)
+}
+
 type NewFile struct {
 	source *os.File
 
