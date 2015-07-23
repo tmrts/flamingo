@@ -1,0 +1,9 @@
+{
+    "attributes": {
+        "google-compute-default-region": "us-central1",
+        "google-compute-default-zone": "us-central1-f",
+        "sshKeys": "user1:ssh-rsa RSA_PUBLIC_KEY_FOR_USER_1 user1@machine\nuser1:ssh-dsa DSA_PUBLIC_KEY_FOR_USER_1 user1@machine\nuser2:ssh-rsa RSA_PUBLIC_KEY_FOR_USER_2 user2@machine\n"
+    },
+    "numericProjectId": 446264097457,
+    "projectId": "speedy-flamingo-101778"
+}
