@@ -1,0 +1,17 @@
+#cloud-config
+
+# TODO: Add specifying a user-name
+# authorized ssh keys
+# ssh_authorized_keys contains a list of ssh public keys to
+# be included as an entry in ~/.ssh/authorized_keys for the root user.
+ssh_authorized_keys:
+  - ssh-rsa RSA_PUBLIC_KEY_1 mykey@host
+  - ssh-rsa RSA_PUBLIC_KEY_2 mykey@host
+
+  # Send pre-generated ssh private keys to the server
+ssh_keys:
+  rsa_public: ssh-rsa RSA_PUBLIC_KEY smoser@localhost
+  rsa_private: |
+    -----BEGIN RSA PRIVATE KEY-----
+    RSA_PRIVATE_KEY
+    -----END RSA PRIVATE KEY-----
