@@ -1,6 +1,10 @@
 package request
 
-import "net/http"
+import (
+	"fmt"
+	"net/http"
+	"strings"
+)
 
 var DefaultClient = ClientImplementation{http.DefaultClient}
 
@@ -18,6 +22,10 @@ func (c *ClientImplementation) performRequest(r *Request) (*Response, error) {
 	resp, err := c.HTTPClient.Do(req)
 	if err != nil {
 		return nil, err
+	}
+
+	if !strings.HasPrefix(resp.Status, "20") {
+		return nil, fmt.Errorf("request: bad status code %v", resp.StatusCode)
 	}
 
 	return &Response{resp}, nil
