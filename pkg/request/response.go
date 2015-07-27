@@ -21,12 +21,21 @@ type Response struct {
 	*http.Response
 }
 
-func (r *Response) JSON(f interface{}) error {
+func (r *Response) Text() ([]byte, error) {
 	buf, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		return nil, err
+	}
+	defer r.Body.Close()
+
+	return buf, nil
+}
+
+func (r *Response) JSON(f interface{}) error {
+	buf, err := r.Text()
 	if err != nil {
 		return err
 	}
-	defer r.Body.Close()
 
 	return json.Unmarshal(buf, &f)
 }
