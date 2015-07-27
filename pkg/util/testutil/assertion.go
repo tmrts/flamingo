@@ -5,6 +5,8 @@ import (
 	"reflect"
 )
 
+// TODO(tmrts): Add meaningful diff messages to failed assertions (goconvey doesn't have them).
+
 // Checks whether two slices contain the same elements.
 func ShouldSetEqual(actual interface{}, expected ...interface{}) (msg string) {
 	actualSlice, expectedSlice := actual.([]string), expected[0].([]string)
@@ -45,17 +47,41 @@ func ShouldConsistOf(actual interface{}, expected ...interface{}) (msg string) {
 
 	switch actual.(type) {
 	case []int:
+		if len(actual.([]int)) != len(expected) {
+			return
+		}
+
 		for i, v := range actual.([]int) {
 			if !reflect.DeepEqual(v, expected[i]) {
 				return
 			}
 		}
 	case []string:
+		if len(actual.([]string)) != len(expected) {
+			return
+		}
+
 		for i, v := range actual.([]string) {
 			if !reflect.DeepEqual(v, expected[i]) {
 				return
 			}
 		}
+	default:
+		if fmt.Sprint(actual) != fmt.Sprint(expected) {
+			return
+		}
+	}
+
+	return ""
+}
+
+func ShouldStructEqual(actual interface{}, expected ...interface{}) (msg string) {
+	msg = fmt.Sprintf("Expected:\n%v\nActual:\n%v\n(Should be equal)", expected[0], actual)
+
+	a, e := fmt.Sprintf("%v", actual), fmt.Sprintf("%v", expected[0])
+
+	if a != e {
+		return
 	}
 
 	return ""
