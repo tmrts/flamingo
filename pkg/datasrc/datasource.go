@@ -7,6 +7,7 @@ import (
 
 	"github.com/tmrts/flamingo/pkg/datasrc/metadata"
 	"github.com/tmrts/flamingo/pkg/datasrc/provider/gce"
+	"github.com/tmrts/flamingo/pkg/datasrc/provider/openstack"
 	"github.com/tmrts/flamingo/pkg/datasrc/userdata"
 )
 
@@ -18,8 +19,10 @@ type Provider interface {
 // SupportedProviders returns the table of supported meta-data sources.
 func SupportedProviders() map[string]Provider {
 	return map[string]Provider{
-		"GCE": &gce.MetadataService{gce.MetadataURL},
+		"GCE":       &gce.MetadataService{gce.MetadataURL},
+		"OpenStack": &openstack.MetadataService{openstack.MetadataURL},
 		//"OpenStack": configdrive.Mount,
+		//"EC2": &ec2.MetadataService{openstack.MetadataURL},
 		/*
 		 *        Name: "Google Compute Engine",
 		 *
