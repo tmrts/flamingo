@@ -1,0 +1,19 @@
+#! /usr/bin/env bash
+
+export ${GOSTRUCTURE}="https://golang.org/doc/code.html"
+[ -z "$GOPATH" ] && echo "GOPATH needs to be configured. Please see ${GOSTRUCTURE}" && exit 1
+
+function flamingo-test {
+    export ORG_PATH="github.com/tmrts"
+    export REPO_PATH="${ORG_PATH}/flamingo"
+
+    go get ${REPO_PATH}
+    go get github.com/tools/godep
+
+    cd ${GOPATH}/${REPO_PATH}
+    godep restore
+
+    go test "$@" ./...
+}
+
+flamingo-test -v
