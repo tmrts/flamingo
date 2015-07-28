@@ -2,7 +2,6 @@ package file_test
 
 import (
 	"os"
-	"os/user"
 	"strconv"
 	"syscall"
 	"testing"
@@ -10,11 +9,12 @@ import (
 	. "github.com/smartystreets/goconvey/convey"
 
 	"github.com/tmrts/flamingo/pkg/file"
+	"github.com/tmrts/flamingo/pkg/sys/nss"
 )
 
 func TestEnsureDirectoryExists(t *testing.T) {
 	Convey("Given a unique dir name, a user name and file permissions", t, func() {
-		currentUser, err := user.Current()
+		currentUser, err := nss.GetCurrentUser()
 		So(err, ShouldBeNil)
 
 		dirname, err := file.UniqueName("/tmp", "filetests")

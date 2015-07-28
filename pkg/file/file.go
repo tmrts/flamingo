@@ -16,6 +16,7 @@ type arguments struct {
 	Permissions os.FileMode
 }
 
+// TODO(tmrts): Accept encoding argument.
 type argument func(*arguments)
 
 func UID(userID int) argument {

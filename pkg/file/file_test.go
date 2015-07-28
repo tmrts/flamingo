@@ -3,7 +3,6 @@ package file_test
 import (
 	"io/ioutil"
 	"os"
-	"os/user"
 	"path/filepath"
 	"strconv"
 	"strings"
@@ -13,6 +12,7 @@ import (
 	. "github.com/smartystreets/goconvey/convey"
 
 	"github.com/tmrts/flamingo/pkg/file"
+	"github.com/tmrts/flamingo/pkg/sys/nss"
 )
 
 func TestNewFileCreation(t *testing.T) {
@@ -95,7 +95,7 @@ func TestRandomFileNameGeneration(t *testing.T) {
 
 func TestEnsureFileExists(t *testing.T) {
 	Convey("Given a unique file name, a user name and file permissions", t, func() {
-		currentUser, err := user.Current()
+		currentUser, err := nss.GetCurrentUser()
 		So(err, ShouldBeNil)
 
 		fname, err := file.UniqueName(os.TempDir(), "filetests")
