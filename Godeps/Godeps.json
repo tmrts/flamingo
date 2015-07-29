@@ -18,6 +18,10 @@
 			"ImportPath": "github.com/smartystreets/goconvey/convey",
 			"Comment": "1.5.0-402-gb903fa1",
 			"Rev": "b903fa1aa6daa8eee319b8bdcff2296f61bb5388"
+		},
+		{
+			"ImportPath": "gopkg.in/yaml.v2",
+			"Rev": "7ad95dd0798a40da1ccdff6dff35fd177b5edf40"
 		}
 	]
 }
