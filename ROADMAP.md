@@ -7,19 +7,19 @@
 - [X] Manage Services at Boot
 - [X] Manage and Modify IPtables/Filter Rules
 - [X] RESTful Client
-- [ ] *Configuration*
-    - [ ] Meta-Data
-    - [ ] Cloud-Config
-    - [ ] Config-Drive
+- [X] *Configuration*
+    - [X] Meta-Data
+    - [X] Cloud-Config
+    - [X] Config-Drive
     - [ ] Integration with Systemd (using config-drive.mount instead of manual checks)
-- [ ] *Test Images*
-- [ ] Atomic Host Package Configuration
+- [X] Atomic Host Package Configuration
     - [ ] rpm-ostree features
     - [ ] Example configurations
+- [ ] *Test Images*
 - [ ] Integration Tests
-    - [ ] OpenStack
+    - [X] OpenStack
     - [ ] Amazon EC2
-    - [ ] Google Compute Engine
+    - [X] Google Compute Engine
     - [ ] OpenNebula
 - [ ] Disk Volume Management
 - [ ] Plug-in Layer

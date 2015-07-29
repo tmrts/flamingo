@@ -58,13 +58,13 @@ will be available soon. In the meanwhile API is volatile, so expect changes!
 - Meta-Data
 - Cloud-Config
 - Config-Drive
-- Integration with systemd (using config-drive.mount instead of manual checks)
+- Integration with `systemd`
 - Test Images
 
 ## Discussions
 In the meanwhile if you'd like to share your opinions, learn more,
 or contribute please feel free to open an issue, mail to [centos-devel], [atomic],
-user-list or come to #[atomic](irc://irc.freenode.net/#atomic-devel) and #[centos-devel](irc://irc.freenode.net/#centos-devel) channels to have a chat.
+user-list or come to \#[atomic](irc://irc.freenode.net/#atomic-devel) and \#[centos-devel](irc://irc.freenode.net/#centos-devel) channels to have a chat.
 
 [Introducing Flamingo]: http://tmrts.com/post/flamingo/
 [cloud-init]: http://cloudinit.readthedocs.org/en/latest/
