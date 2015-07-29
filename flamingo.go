@@ -34,7 +34,7 @@ func FinalizeContextualization() error {
 	return nil
 }
 
-func HasRootPrivileges() bool {
+func HasRootPrivileges() (bool, error) {
 	// TODO(tmrts): Move privilege check to sys.nss package
 	ent, err := sys.Execute("getent", "gshadow", "root")
 	if err != nil {
