@@ -1,5 +1,7 @@
 # Flamingo
 
+[![GoDoc](https://godoc.org/github.com/tmrts/flamingo?status.png)](https://godoc.org/github.com/tmrts/flamingo)) [![Travis](https://travis-ci.org/tmrts/flamingo.svg?branch=master)](https://travis-ci.org/tmrts/flamingo))
+
 ![Flamingo Logo](/logo.png)
 
 *Flamingo* is a lightweight contextualization tool that aims to handle
