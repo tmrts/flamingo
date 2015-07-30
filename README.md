@@ -41,9 +41,12 @@ maintainer.
 - Testability, Documentation and Extensibility is heavily emphasized in *Flamingo*.
 
 # Status
-*Flamingo* is in **Alpha** stage at the moment. Build images containing
-*Flamingo* as the default contextualization tool (swapped with cloud-init)
-will be available soon. In the meanwhile API is volatile, so expect changes!
+*Flamingo* is version **v0.1.0** at the moment. 
+
+For the list of features and the planned changes please see the [blog post](http://tmrts.com/post/0.1.0/)
+
+Build images containing *Flamingo* as the default contextualization tool (swapped with `cloud-init`)
+will be available soon.
 
 ## What has been done
 
