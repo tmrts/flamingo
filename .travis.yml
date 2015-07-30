@@ -9,7 +9,10 @@ matrix:
 
 install:
   - go get github.com/tools/godep
+  - go get golang.org/x/tools/cmd/cover
+  - go get github.com/axw/gocov/gocov
   - go get github.com/mattn/goveralls
 
 script:
   - bin/test -v -race
+  - goveralls -repotoken $COVERALLS_TOKEN
