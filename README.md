@@ -1,6 +1,6 @@
 # Flamingo
 
-[![Travis](https://travis-ci.org/tmrts/flamingo.svg?branch=master)](https://travis-ci.org/tmrts/flamingo) [![Coverage Status](https://coveralls.io/repos/tmrts/flamingo/badge.svg?branch=master&service=github)](https://coveralls.io/github/tmrts/flamingo?branch=master) [![GoDoc](https://godoc.org/github.com/tmrts/flamingo?status.png)](https://godoc.org/github.com/tmrts/flamingo)
+[![Travis](https://travis-ci.org/tmrts/flamingo.svg?branch=master)](https://travis-ci.org/tmrts/flamingo) [![Coverage Status](https://coveralls.io/repos/tmrts/flamingo/badge.svg?branch=master&service=github)](https://coveralls.io/github/tmrts/flamingo?branch=master) [![GoDoc](https://godoc.org/github.com/tmrts/flamingo?status.png)](https://godoc.org/github.com/tmrts/flamingo) [![Stories in Ready](https://badge.waffle.io/tmrts/flamingo.png?label=ready&title=Ready)](https://waffle.io/tmrts/flamingo)
 
 ![Flamingo Logo](/logo.png)
 
