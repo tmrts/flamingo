@@ -157,34 +157,20 @@ func parseGroups(vals []interface{}) map[string][]string {
 	groups := make(map[string][]string)
 
 	for _, group := range vals {
-		// Disgusting hack to convert map[interface{}]interface to map[string][]string
-		// TODO(tmrts): Refactor
-		switch group.(type) {
-		case map[interface{}]interface{}:
-			g := group.(map[interface{}]interface{})
-
-			for k, v := range g {
-
-				switch k.(type) {
-				case string:
-					x := k.(string)
-					switch v.(type) {
-					case []interface{}:
-						y := v.([]interface{})
-						m := []string{}
-						for _, v := range y {
-							switch v.(type) {
-							case string:
-								m = append(m, v.(string))
-							}
-						}
-						groups[x] = m
-					}
-				}
-			}
-
+		switch group := group.(type) {
 		case string:
-			groups[group.(string)] = []string{}
+			groups[group] = []string{}
+		case map[interface{}]interface{}:
+			for name, users := range group {
+				name := name.(string)
+
+				members := []string{}
+				for _, m := range users.([]interface{}) {
+					members = append(members, m.(string))
+				}
+
+				groups[name] = members
+			}
 		}
 	}
 
