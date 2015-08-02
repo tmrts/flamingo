@@ -106,20 +106,16 @@ func TestEnsureFileExists(t *testing.T) {
 		userID, _ := strconv.Atoi(currentUser.Uid)
 		groupID, _ := strconv.Atoi(currentUser.Gid)
 
-		// TODO(tmrts): Refactor the test
 		Convey("It should create a new file if it doesn't exist", func() {
 			err := file.EnsureExists(fname, perms, userID, groupID)
 			So(err, ShouldBeNil)
 			defer os.Remove(fname)
 
-			fi, err := os.Lstat(fname)
+			UID, GID, err := file.IDsFor(fname)
 			So(err, ShouldBeNil)
 
-			uid := strconv.Itoa(int(fi.Sys().(*syscall.Stat_t).Uid))
-			So(currentUser.Uid, ShouldEqual, uid)
-
-			gid := strconv.Itoa(int(fi.Sys().(*syscall.Stat_t).Gid))
-			So(currentUser.Gid, ShouldEqual, gid)
+			So(currentUser.Uid, ShouldEqual, UID)
+			So(currentUser.Gid, ShouldEqual, GID)
 		})
 	})
 }

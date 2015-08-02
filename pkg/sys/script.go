@@ -10,6 +10,8 @@ func FileHasShabang(filename string) (bool, error) {
 	f, err := os.Open(filename)
 	if err != nil {
 		return false, err
+	} else {
+		defer f.Close()
 	}
 
 	twoBytes := make([]byte, 2)

@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strconv"
+	"syscall"
 
 	"github.com/tmrts/flamingo/pkg/util/rand"
 )
@@ -120,4 +122,21 @@ func EnsureExists(filename string, perms os.FileMode, userID int, groupID int) e
 	}
 
 	return nil
+}
+
+// IDsFor gets the file information for the given file name and returns
+// the user and group ID for that file.
+func IDsFor(fname string) (UID, GID string, err error) {
+	fi, err := os.Lstat(fname)
+	if err != nil {
+		return
+	}
+
+	s := fi.Sys().(*syscall.Stat_t)
+
+	u32toa := func(u uint32) string {
+		return strconv.Itoa(int(u))
+	}
+
+	return u32toa(s.Uid), u32toa(s.Gid), nil
 }
