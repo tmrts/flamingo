@@ -1,15 +1,25 @@
 package sys
 
-import "io/ioutil"
+import (
+	"io/ioutil"
+	"os"
+)
 
 // HasShabang checks whether the named file is a script by checking the shabang directive
 func FileHasShabang(filename string) (bool, error) {
-	// TODO: Don't read the complete file, only the first line or few bytes.
-	byteContent, _ := ioutil.ReadFile(filename)
+	f, err := os.Open(filename)
+	if err != nil {
+		return false, err
+	}
 
-	content := string(byteContent)
+	twoBytes := make([]byte, 2)
 
-	return content[0] == '#' && content[1] == '!', nil
+	_, err = f.Read(twoBytes)
+	if err != nil {
+		return false, err
+	}
+
+	return twoBytes[0] == '#' && twoBytes[1] == '!', nil
 }
 
 // WriteScript writes the content of the byte slice into the named file
