@@ -1,18 +1,21 @@
 Name:    flamingo
-Version: 0.1.0
+Version: v0.1.0
 Release: 1
+Group:   System Environment/Daemons
 Summary: Cloud Instance Contextualization Tool
 License: Apache 2.0
 URL:     http://github.com/tmrts/flamingo
-Group:   System Environment/Daemons
-Source0: https://github.com/tmrts/%{name}/releases/download/v%{version}/%%{name}-v%{version}-linux-amd64.tar.gz
+Source0: https://github.com/tmrts/%{name}/releases/download/%{version}/%{name}-%{version}-linux-amd64.tar.gz
 
-Buildroot: %{_tmppath}/%{name}-%{version}-%{release}-%(%{__id_u} -n)
+Buildroot: %{_tmppath}/%{name}-%{version}-%(%{__id_u} -n)
 Packager:  Tamer Tas <contact@tmrts.com>
 
+Requires(pre): nss
+Requires(pre): systemd
+Requires(pre): libssh2
+Requires(pre): iptables
 Requires(pre): shadow-utils
 Requires(pre): systemd-units
-Requires(pre): iptables
 
 %description
 Flamingo is a lightweight contextualization tool that handles
@@ -28,27 +31,21 @@ Flamingo is written in Go and it's main focus points are:
 * Extensibility
 
 %prep
-%setup -n %{name}-v%{version}-linux-amd64
-
-%build
-rm -rf %{buildroot}
-
-echo  %{buildroot}
+%setup -n %{name}-%{version}.x86_64
 
 %install
-install -d -m 755 %{buildroot}/%{_sbindir}
-install    -m 755 %{_builddir}/%{name}-v%{version}-linux-amd64/flamingo %{buildroot}/%{_sbindir}
+install -d -m 755 %{buildroot}/bin
 
-%clean
-rm -rf %{buildroot}
+install    -m 755 %{_builddir}/%{name}-%{version}.x86_64/bin/%{name} %{buildroot}/bin/
+install    -m 755 %{_builddir}/%{name}-%{version}.x86_64/unit %{buildroot}/
 
-%post
-chkconfig --add %{name}
+ln -sf %{buildroot}/bin/%{name} /bin/%{name}
+systemctl enable --system %{buildroot}/unit/%{name}.service
 
 %files
-%defattr(-,root,root)
-%{_sbindir}/flamingo
-%{_defaultdocdir}/doc/*.md
+/bin/*
+/unit/*
 
 %changelog
-    - Initial Spec.
+* Mon Aug 03 2015 Flamingo <contact@tmrts.com> 0.1.0
+- Initial RPM release.

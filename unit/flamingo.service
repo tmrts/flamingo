@@ -1,0 +1,8 @@
+[Unit]
+Description=Flamingo Cloud Instance Contextualization Tool
+
+[Service]
+ExecStart=-/bin/flamingo
+
+[Install]
+WantedBy=multi-user.target
