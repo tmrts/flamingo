@@ -1,6 +1,6 @@
 #! /usr/bin/env bash
 
-export ${GOSTRUCTURE}="https://golang.org/doc/code.html"
+export GOSTRUCTURE="https://golang.org/doc/code.html"
 [ -z "$GOPATH" ] && echo "GOPATH needs to be configured. Please see ${GOSTRUCTURE}" && exit 1
 
 function flamingo-test {

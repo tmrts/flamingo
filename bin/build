@@ -1,6 +1,6 @@
 #! /usr/bin/env bash
 
-export ${GOSTRUCTURE}="https://golang.org/doc/code.html"
+export GOSTRUCTURE="https://golang.org/doc/code.html"
 [ -z "$GOPATH" ] && echo "GOPATH needs to be configured. Please see ${GOSTRUCTURE}" && exit 1
 
 function flamingo-build {
@@ -10,7 +10,7 @@ function flamingo-build {
     go get ${REPO_PATH}
     go get github.com/tools/godep
 
-    cd ${GOPATH}/${REPO_PATH}
+    cd "${GOPATH}/${REPO_PATH}"
     godep restore
 
     go clean
