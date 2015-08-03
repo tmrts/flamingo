@@ -10,7 +10,8 @@ function flamingo-build {
     go get ${REPO_PATH}
     go get github.com/tools/godep
 
-    cd "${GOPATH}/${REPO_PATH}"
+    cd ${GOPATH}
+    cd src/${REPO_PATH}
     godep restore
 
     go clean

@@ -10,7 +10,8 @@ function flamingo-install {
     go get ${REPO_PATH}
     go get github.com/tools/godep
 
-    cd ${GOPATH}/${REPO_PATH}
+    cd ${GOPATH}
+    cd src/${REPO_PATH}
     godep restore
 
     go install "$@" flamingo.go
