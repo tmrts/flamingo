@@ -54,11 +54,6 @@ func TestFetchMetadata(t *testing.T) {
 
 		timeout := time.Millisecond * 500
 
-		Convey("It shouldn't return an error while checking the provider", func() {
-			err := datasrc.Check(mockGCEProvider)
-			So(err, ShouldBeNil)
-		})
-
 		Convey("It should find the available data source provider", func() {
 			provider, err := datasrc.FindProvider(mockDataSources, timeout)
 			So(err, ShouldBeNil)

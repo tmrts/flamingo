@@ -43,11 +43,15 @@ var (
 	ErrDatasourceRetrievalTimeout = errors.New("datasrc: timeout during data-source retrieval")
 )
 
-// Check tries to fetch meta-data from the given datasource provider
+// isAvailable tries to fetch meta-data from the given datasource provider
 // and returns the error if it encounters any.
-func Check(p Provider) error {
+func isAvailable(p Provider) bool {
 	_, err := p.FetchMetadata()
-	return err
+	if err != nil {
+		log.Print("datasrc.isAvailable:", err)
+	}
+
+	return err == nil
 }
 
 // FindProvider checks the given datasource providers and returns the available one.
@@ -56,12 +60,9 @@ func FindProvider(providers map[string]Provider, timeout time.Duration) (Provide
 
 	for _, p := range providers {
 		go func() {
-			if err := Check(p); err != nil {
-				log.Print(err)
-				return
+			if isAvailable(p) {
+				providerChan <- p
 			}
-
-			providerChan <- p
 		}()
 	}
 
