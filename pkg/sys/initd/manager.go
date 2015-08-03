@@ -1,5 +1,7 @@
+// initd provides interfaces and implementations for system initialization daemons
 package initd
 
+// Manager interface wraps initd gateway implementations
 type Manager interface {
 	ReloadDaemon() error
 
