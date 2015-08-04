@@ -14,13 +14,17 @@ var (
 // FindMountTarget finds the mount target location of the config drive device.
 // It finds the device labeled with 'LABEL=config-2', then gets the mount target
 // of that device.
-func FindMountTarget() (string, error) {
-	dev, err := sys.Execute("blkid", "-t LABEL='config-2'", "-odevice")
+func FindMountTarget(e sys.Executor) (string, error) {
+	dev, err := e.Execute("blkid", "-t LABEL='config-2'", "-odevice")
 	if err != nil {
 		return "", err
 	}
 
-	return sys.Execute("findmnt", "--raw", "--noheadings", "--output TARGET", dev)
+	if dev == "" {
+		return "", ErrUnableToLocateConfigDrive
+	}
+
+	return e.Execute("findmnt", "--raw", "--noheadings", "--output TARGET", dev)
 }
 
 /*
