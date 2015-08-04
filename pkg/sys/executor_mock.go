@@ -49,3 +49,15 @@ func (se *StubExecutor) Execute(exec string, args ...string) (string, error) {
 
 	return se.out, se.err
 }
+
+type funcExecutor func(string, ...string) (string, error)
+
+func (f funcExecutor) Execute(cmd string, args ...string) (string, error) {
+	return f(cmd, args...)
+}
+
+func NewFuncExecutor(fn func(string, ...string) (string, error)) Executor {
+	var exec funcExecutor = fn
+
+	return exec
+}
