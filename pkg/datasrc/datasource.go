@@ -75,38 +75,3 @@ func FindProvider(providers map[string]Provider, timeout time.Duration) (Provide
 		return nil, ErrDatasourceRetrievalTimeout
 	}
 }
-
-// FetchData queries metadata services and returns the available metadata digest
-// Since there will be only one metadata service operational (or multiple ones returning the same),
-// it queries each known service and returns at timeout or a successful response.
-func FetchMetadata(datasrcs map[string]Provider, timeout time.Duration) (*metadata.Digest, error) {
-	metadataChan := make(chan *metadata.Digest)
-	errch := make(chan error)
-
-	go func() {
-		for _, ds := range datasrcs {
-			go func() {
-				_, err := ds.FetchMetadata()
-				if err != nil {
-					log.Fatalf(err.Error())
-					return
-				}
-
-				//d := *m.Digest()
-
-				//metadataChan <- d
-			}()
-		}
-
-		<-time.NewTimer(timeout).C
-
-		errch <- ErrDatasourceRetrievalTimeout
-	}()
-
-	select {
-	case md := <-metadataChan:
-		return md, nil
-	case err := <-errch:
-		return nil, err
-	}
-}
