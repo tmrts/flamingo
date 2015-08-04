@@ -21,21 +21,6 @@ func SupportedProviders() map[string]Provider {
 	return map[string]Provider{
 		"GCE":       &gce.MetadataService{gce.MetadataURL},
 		"OpenStack": &openstack.MetadataService{openstack.MetadataURL},
-		//"OpenStack": configdrive.Mount,
-		//"EC2": &ec2.MetadataService{openstack.MetadataURL},
-		/*
-		 *        Name: "Google Compute Engine",
-		 *
-		 *        URL: "http://metadata.google.internal/computeMetadata/%s/instance/?recursive=true",
-		 *        "EC2": &DataSource{
-		 *            Name: "Amazon Elastic Compute Cloud",
-		 *            SupportedVersions: []Version{
-		 *                "latest",
-		 *            },
-		 *
-		 *            URL: "http://169.254.169.254/%s/meta-data/",
-		 *        },
-		 */
 	}
 }
 
