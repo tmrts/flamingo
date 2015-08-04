@@ -11,6 +11,10 @@ import (
 	"github.com/tmrts/flamingo/pkg/datasrc/userdata"
 )
 
+var (
+	ErrDatasourceRetrievalTimeout = errors.New("datasrc: timeout during data-source retrieval")
+)
+
 type Provider interface {
 	metadata.Provider
 	userdata.Provider
@@ -23,10 +27,6 @@ func SupportedProviders() map[string]Provider {
 		"OpenStack": &openstack.MetadataService{openstack.MetadataURL},
 	}
 }
-
-var (
-	ErrDatasourceRetrievalTimeout = errors.New("datasrc: timeout during data-source retrieval")
-)
 
 // isAvailable tries to fetch meta-data from the given datasource provider
 // and returns the error if it encounters any.
