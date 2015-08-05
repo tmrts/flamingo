@@ -2,8 +2,13 @@
 package configdrive
 
 import (
+	"encoding/json"
 	"errors"
+	"io/ioutil"
+	"path/filepath"
 
+	"github.com/tmrts/flamingo/pkg/datasrc/provider/openstack"
+	"github.com/tmrts/flamingo/pkg/datasrc/userdata"
 	"github.com/tmrts/flamingo/pkg/sys"
 )
 
@@ -27,22 +32,35 @@ func FindMountTarget(e sys.Executor) (string, error) {
 	return e.Execute("findmnt", "--raw", "--noheadings", "--output TARGET", dev)
 }
 
-/*
- *
- *func (m *Mount) FetchMetadata() (metadata.Digest, error) {
- *    var data []byte
- *    var m struct {
- *        SSHKeys map[string][]string `json:"public_keys"`
- *        Hostname            string            `json:"hostname"`
- *        NetworkInterfaces   metadata.NetworkInterfaces `json:"content_path"`
- *    }
- *
- *    metadata.SSHPublicKeys = m.SSHKeys
- *    metadata.Hostname = m.Hostname
- *    if m.NetworkConfig.ContentPath != "" {
- *        metadata.NetworkConfig, err = m.tryReadFile(path.Join(m.Path, m.NetworkConfig.ContentPath))
- *    }
- *
- *    return metadata, err
- *}
- */
+type Mount struct {
+	Path string
+}
+
+func (m Mount) FetchMetadata() (*openstack.Metadata, error) {
+	metadataPath := filepath.Join(m.Path, "openstack/2012-08-10/meta_data.json")
+	buf, err := ioutil.ReadFile(metadataPath)
+	if err != nil {
+		return nil, err
+	}
+
+	var metadata openstack.Metadata
+	if err := json.Unmarshal(buf, &metadata); err != nil {
+		return nil, err
+	}
+
+	return &metadata, err
+}
+
+func (m Mount) FetchUserdata() (userdata.Map, error) {
+	userdataPath := filepath.Join(m.Path, "openstack/2012-08-10/user_data")
+	buf, err := ioutil.ReadFile(userdataPath)
+	if err != nil {
+		return nil, err
+	}
+
+	userdata := make(userdata.Map)
+
+	userdata["user-data"] = string(buf)
+
+	return userdata, err
+}
