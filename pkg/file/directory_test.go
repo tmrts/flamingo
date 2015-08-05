@@ -43,7 +43,6 @@ func TestEnsureDirectoryExists(t *testing.T) {
 		})
 
 		Convey("It should change the ownership and the file permissions if it exists", func() {
-			t.SkipNow()
 			err := file.EnsureDirectoryExists(dirname, perms, userID, groupID)
 			So(err, ShouldBeNil)
 			defer os.Remove(dirname)
