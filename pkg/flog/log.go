@@ -3,52 +3,81 @@ package flog
 
 import "github.com/Sirupsen/logrus"
 
-type Field func() (string, string)
+type Parameter interface {
+	Convert() map[string]interface{}
+}
 
-func transform(fields []Field) logrus.Fields {
+type Fields struct {
+	Event string
+	Error error
+}
+
+func (f Fields) Convert() map[string]interface{} {
+	fields := map[string]interface{}{}
+
+	if f.Event != "" {
+		fields["event"] = f.Event
+	}
+
+	if f.Error != nil {
+		fields["error"] = f.Error
+	}
+
+	return fields
+}
+
+type Details map[string]interface{}
+
+func (d Details) Convert() map[string]interface{} {
+	return d
+}
+
+func transform(params []Parameter) logrus.Fields {
 	logrusFields := logrus.Fields{}
 
-	for _, f := range fields {
-		k, v := f()
+	for _, p := range params {
+		fieldMap := p.Convert()
 
-		logrusFields[k] = v
+		for k, v := range fieldMap {
+			logrusFields[k] = v
+		}
 	}
 
 	return logrusFields
 }
 
-func Debug(msg string, fields ...Field) {
-	f := transform(fields)
+func Debug(msg string, params ...Parameter) {
+	f := transform(params)
 
 	logrus.WithFields(f).Debug(msg)
 }
 
-func Info(msg string, fields ...Field) {
-	f := transform(fields)
+func Info(msg string, params ...Parameter) {
+	f := transform(params)
 
 	logrus.WithFields(f).Info(msg)
 }
 
-func Warn(msg string, fields ...Field) {
-	f := transform(fields)
+func Warn(msg string, params ...Parameter) {
+	f := transform(params)
 
 	logrus.WithFields(f).Warning(msg)
 }
 
-func Error(msg string, fields ...Field) {
-	f := transform(fields)
+func Error(msg string, params ...Parameter) {
+	f := transform(params)
 
 	logrus.WithFields(f).Error(msg)
 }
 
-func Fatal(msg string, fields ...Field) {
-	f := transform(fields)
+func Fatal(msg string, params ...Parameter) {
+	f := transform(params)
 
 	logrus.WithFields(f).Fatal(msg)
 }
 
-func Panic(msg string, fields ...Field) {
-	f := transform(fields)
+func Panic(msg string, params ...Parameter) {
+	f := transform(params)
 
 	logrus.WithFields(f).Panic(msg)
 }
