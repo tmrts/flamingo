@@ -62,7 +62,7 @@ func TestFetchMetadata(t *testing.T) {
 		})
 
 		Convey("When datasources are unavailable it should timeout", func() {
-			_, err := datasrc.FetchMetadata(map[string]datasrc.Provider{}, 0*time.Second)
+			_, err := datasrc.FindProvider(map[string]datasrc.Provider{}, 0*time.Second)
 			So(err, ShouldEqual, datasrc.ErrDatasourceRetrievalTimeout)
 		})
 	})
