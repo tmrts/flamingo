@@ -7,7 +7,6 @@ import (
 	"github.com/tmrts/flamingo/pkg/datasrc"
 	"github.com/tmrts/flamingo/pkg/distro"
 	"github.com/tmrts/flamingo/pkg/flog"
-	"github.com/tmrts/flamingo/pkg/flog/logfield"
 	"github.com/tmrts/flamingo/pkg/sys"
 )
 
@@ -26,7 +25,9 @@ func init() {
 func InitializeContextualization() error {
 	// TODO(tmrts): Add plug-in hooks
 	flog.Info("Initializing contextualization",
-		logfield.Event("main.InitializeContextualization"),
+		flog.Fields{
+			Event: "main.InitializeContextualization",
+		},
 	)
 	return nil
 }
@@ -34,7 +35,9 @@ func InitializeContextualization() error {
 func FinalizeContextualization() error {
 	// TODO(tmrts): Add plug-in hooks
 	flog.Info("Finalizing contextualization",
-		logfield.Event("main.FinalizeContextualization"),
+		flog.Fields{
+			Event: "main.FinalizeContextualization",
+		},
 	)
 	return nil
 }
@@ -70,8 +73,10 @@ func main() {
 	hasRoot, err := HasRootPrivileges()
 	if err != nil {
 		flog.Fatal("Failed checking user privileges",
-			logfield.Event("main.HasRootPrivileges"),
-			logfield.Error(err),
+			flog.Fields{
+				Event: "main.HasRootPrivileges",
+				Error: err,
+			},
 		)
 	}
 
@@ -83,8 +88,10 @@ func main() {
 
 	if err := InitializeContextualization(); err != nil {
 		flog.Fatal("Failed to start contextualization",
-			logfield.Event("main.InitializeContextualization"),
-			logfield.Error(err),
+			flog.Fields{
+				Event: "main.InitializeContextualization",
+				Error: err,
+			},
 		)
 	}
 
@@ -93,45 +100,69 @@ func main() {
 	p, err := datasrc.FindProvider(providers, 5*time.Second)
 	if err != nil {
 		flog.Fatal("Failed to start contextualization",
-			logfield.Event("datasrc.FindProvider"),
-			logfield.Error(err),
+			flog.Fields{
+				Event: "datasrc.FindProvider",
+				Error: err,
+			},
 		)
 	}
 
 	m, err := p.FetchMetadata()
 	if err != nil {
 		flog.Fatal("Failed to fetch meta-data from provider",
-			logfield.Event("%s.FetchMetadata", p),
-			logfield.Error(err),
+			flog.Fields{
+				Event: "provider.FetchMetadata",
+				Error: err,
+			},
+			flog.Details{
+				"provider": p,
+			},
 		)
 	}
 
 	u, err := p.FetchUserdata()
 	if err != nil {
 		flog.Fatal("Failed to fetch user-data from provider",
-			logfield.Event("%s.FetchUserdata", p),
-			logfield.Error(err),
+			flog.Fields{
+				Event: "provider.FetchUserdata",
+				Error: err,
+			},
+			flog.Details{
+				"provider": p,
+			},
 		)
 	}
 
 	if err := centOS.ConsumeMetadata(m); err != nil {
 		flog.Fatal("Failed to consume meta-data",
-			logfield.Event("CentOS.ConsumeMetadata"),
-			logfield.Error(err),
+			flog.Fields{
+				Event: "distro.ConsumeMetadata",
+				Error: err,
+			},
+			flog.Details{
+				"distribution": "CentOS",
+			},
 		)
 	}
 
 	if err := centOS.ConsumeUserdata(u); err != nil {
 		flog.Fatal("Failed to consume user-data",
-			logfield.Event("CentOS.ConsumeMetadata"),
-			logfield.Error(err),
+			flog.Fields{
+				Event: "distro.ConsumeMetadata",
+				Error: err,
+			},
+			flog.Details{
+				"distribution": "CentOS",
+			},
 		)
 	}
 
 	if err := FinalizeContextualization(); err != nil {
 		flog.Fatal("Failed to finalize contextualization",
-			logfield.Event("main.FinalizeContextualization"),
-			logfield.Error(err),
+			flog.Fields{
+				Event: "main.FinalizeContextualization",
+				Error: err,
+			},
 		)
 	}
 }
