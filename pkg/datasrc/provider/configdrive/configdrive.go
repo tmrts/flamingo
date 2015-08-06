@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"path/filepath"
 
+	"github.com/tmrts/flamingo/pkg/datasrc/metadata"
 	"github.com/tmrts/flamingo/pkg/datasrc/provider/openstack"
 	"github.com/tmrts/flamingo/pkg/datasrc/userdata"
 	"github.com/tmrts/flamingo/pkg/sys"
@@ -36,7 +37,7 @@ type Mount struct {
 	Path string
 }
 
-func (m Mount) FetchMetadata() (*openstack.Metadata, error) {
+func (m Mount) FetchMetadata() (*metadata.Digest, error) {
 	metadataPath := filepath.Join(m.Path, "openstack/2012-08-10/meta_data.json")
 	buf, err := ioutil.ReadFile(metadataPath)
 	if err != nil {
@@ -48,7 +49,9 @@ func (m Mount) FetchMetadata() (*openstack.Metadata, error) {
 		return nil, err
 	}
 
-	return &metadata, err
+	digest := metadata.Digest()
+
+	return &digest, err
 }
 
 func (m Mount) FetchUserdata() (userdata.Map, error) {
