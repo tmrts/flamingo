@@ -8,7 +8,6 @@ import (
 )
 
 const (
-	// currently only supported metadata version
 	LatestSupportedMetadataVersion string = "2012-08-10"
 
 	MetadataURL provider.FormatURL = "http://169.254.169.254/openstack/%s/%s"

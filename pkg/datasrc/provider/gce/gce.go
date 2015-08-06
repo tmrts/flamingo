@@ -8,6 +8,8 @@ import (
 )
 
 const (
+	LatestSupportedMetadataVersion = "v1"
+
 	MetadataURL provider.FormatURL = "http://metadata.google.internal/computeMetadata/%s/%s/?recursive=true"
 )
 
