@@ -2,11 +2,12 @@ package main
 
 import (
 	"flag"
-	"log"
 	"time"
 
 	"github.com/tmrts/flamingo/pkg/datasrc"
 	"github.com/tmrts/flamingo/pkg/distro"
+	"github.com/tmrts/flamingo/pkg/flog"
+	"github.com/tmrts/flamingo/pkg/flog/logfield"
 	"github.com/tmrts/flamingo/pkg/sys"
 )
 
@@ -24,13 +25,17 @@ func init() {
 
 func InitializeContextualization() error {
 	// TODO(tmrts): Add plug-in hooks
-	log.Print("main: starting the contextualization")
+	flog.Info("Initializing contextualization",
+		logfield.Event("main.InitializeContextualization"),
+	)
 	return nil
 }
 
 func FinalizeContextualization() error {
 	// TODO(tmrts): Add plug-in hooks
-	log.Print("main: finalizing the contextualization")
+	flog.Info("Finalizing contextualization",
+		logfield.Event("main.FinalizeContextualization"),
+	)
 	return nil
 }
 
@@ -64,45 +69,69 @@ func main() {
 	// TODO(tmrts): Build a logger hierarchy
 	hasRoot, err := HasRootPrivileges()
 	if err != nil {
-		log.Fatalf("failed to check current user privileges, %v", err)
+		flog.Fatal("Failed checking user privileges",
+			logfield.Event("main.HasRootPrivileges"),
+			logfield.Error(err),
+		)
 	}
 
 	if !hasRoot {
-		log.Fatal("current user doesn't have root privileges")
+		flog.Fatal("current user doesn't have root privileges")
 	}
 
 	centOS := distro.CentOS(sys.DefaultExecutor)
 
 	if err := InitializeContextualization(); err != nil {
-		log.Fatalf("failed to contextualization, %v", err)
+		flog.Fatal("Failed to start contextualization",
+			logfield.Event("main.InitializeContextualization"),
+			logfield.Error(err),
+		)
 	}
 
 	providers := datasrc.SupportedProviders()
 
 	p, err := datasrc.FindProvider(providers, 5*time.Second)
 	if err != nil {
-		log.Fatalf("failed to find an available datasource provider, %v", err)
+		flog.Fatal("Failed to start contextualization",
+			logfield.Event("datasrc.FindProvider"),
+			logfield.Error(err),
+		)
 	}
 
 	m, err := p.FetchMetadata()
 	if err != nil {
-		log.Fatalf("failed to fetch meta-data from provider %v, %v", p, err)
+		flog.Fatal("Failed to fetch meta-data from provider",
+			logfield.Event("%s.FetchMetadata", p),
+			logfield.Error(err),
+		)
 	}
 
 	u, err := p.FetchUserdata()
 	if err != nil {
-		log.Fatalf("failed to fetch user-data from provider %v, %v", p, err)
+		flog.Fatal("Failed to fetch user-data from provider",
+			logfield.Event("%s.FetchUserdata", p),
+			logfield.Error(err),
+		)
 	}
 
 	if err := centOS.ConsumeMetadata(m); err != nil {
-		log.Fatalf("failed to consume meta-data, %v", err)
+		flog.Fatal("Failed to consume meta-data",
+			logfield.Event("CentOS.ConsumeMetadata"),
+			logfield.Error(err),
+		)
 	}
 
 	if err := centOS.ConsumeUserdata(u); err != nil {
-		log.Fatalf("failed to consume user-data, %v", err)
+		flog.Fatal("Failed to consume user-data",
+			logfield.Event("CentOS.ConsumeMetadata"),
+			logfield.Error(err),
+		)
 	}
 
 	if err := FinalizeContextualization(); err != nil {
-		log.Fatalf("failed to finalize contextualization, %v", err)
+		flog.Fatal("Failed to finalize contextualization",
+			logfield.Event("main.FinalizeContextualization"),
+			logfield.Error(err),
+		)
 	}
 }
