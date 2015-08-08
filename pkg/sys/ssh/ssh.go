@@ -20,15 +20,16 @@ var (
 	AuthorizedKeysPath = ".ssh/authorized_keys"
 )
 
+// Key is an SSH key public or private.
 type Key []byte
 
-// KeyPair represents an SSH keypair, public and private.
+// KeyPair is an SSH keypair, public and private.
 type KeyPair struct {
 	Public  Key
 	Private Key
 }
 
-// Verify uses ssh-keygen utility to verify an SSH key.
+// Verify uses 'ssh-keygen' utility to verify an SSH key.
 // It returns an error if a problem occurs or the key is invalid.
 // The caller should diagnose the error for more information.
 func Verify(key Key) error {
@@ -70,7 +71,7 @@ func InitializeFor(usr *user.User) error {
 	return file.EnsureExists(userAuthorizedKeysPath, 0600, userID, groupID)
 }
 
-// AuthorizeKeys appends the given SSH public keys to the given file.
+// AuthorizeKeys appends the given SSH public keys to the given os.File.
 func AuthorizeKeys(authorizedKeysFile *os.File, publicKeys ...Key) error {
 	var keys []string
 	for _, key := range publicKeys {
