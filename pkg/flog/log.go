@@ -32,6 +32,13 @@ func (d Details) Convert() map[string]interface{} {
 	return d
 }
 
+type DebugFields map[string]interface{}
+
+func (d DebugFields) Convert() map[string]interface{} {
+	// TODO(tmrts): Handle debug information
+	return map[string]interface{}{}
+}
+
 func transform(params []Parameter) logrus.Fields {
 	logrusFields := logrus.Fields{}
 
