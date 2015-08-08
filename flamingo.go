@@ -53,21 +53,7 @@ func HasRootPrivileges() (bool, error) {
 }
 
 func main() {
-	flag.Parse()
-
-	/*
-	 *    if flags.cloudConfig != "" {
-	 *        conf, err := os.Open(flags.cloudConfig)
-	 *        if err != nil {
-	 *            log.Panicf("fatal error config file: %v", err)
-	 *        }
-	 *
-	 *        _, err = cloudconfig.Parse(conf)
-	 *        if err != nil {
-	 *            log.Panicf("fatal error config file: %v", err)
-	 *        }
-	 *    }
-	 */
+	// TODO(tmrts): Add command-line flags
 
 	// TODO(tmrts): Build a logger hierarchy
 	hasRoot, err := HasRootPrivileges()
@@ -111,7 +97,7 @@ func main() {
 	if err != nil {
 		flog.Fatal("Failed to fetch meta-data from provider",
 			flog.Fields{
-				Event: "provider.FetchMetadata",
+				Event: "metadata.Provider.FetchMetadata",
 				Error: err,
 			},
 			flog.Details{
@@ -124,7 +110,7 @@ func main() {
 	if err != nil {
 		flog.Fatal("Failed to fetch user-data from provider",
 			flog.Fields{
-				Event: "provider.FetchUserdata",
+				Event: "userdata.Provider.FetchUserdata",
 				Error: err,
 			},
 			flog.Details{
@@ -136,7 +122,7 @@ func main() {
 	if err := centOS.ConsumeMetadata(m); err != nil {
 		flog.Fatal("Failed to consume meta-data",
 			flog.Fields{
-				Event: "distro.ConsumeMetadata",
+				Event: "distro.Implementation.ConsumeMetadata",
 				Error: err,
 			},
 			flog.Details{
@@ -148,7 +134,7 @@ func main() {
 	if err := centOS.ConsumeUserdata(u); err != nil {
 		flog.Fatal("Failed to consume user-data",
 			flog.Fields{
-				Event: "distro.ConsumeMetadata",
+				Event: "distro.Implementation.ConsumeMetadata",
 				Error: err,
 			},
 			flog.Details{
