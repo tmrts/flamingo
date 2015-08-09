@@ -97,7 +97,7 @@ func main() {
 	if err != nil {
 		flog.Fatal("Failed to fetch meta-data from provider",
 			flog.Fields{
-				Event: "metadata.Provider.FetchMetadata",
+				Event: "datasrc.Provider.FetchMetadata",
 				Error: err,
 			},
 			flog.Details{
@@ -110,7 +110,7 @@ func main() {
 	if err != nil {
 		flog.Fatal("Failed to fetch user-data from provider",
 			flog.Fields{
-				Event: "userdata.Provider.FetchUserdata",
+				Event: "datasrc.Provider.FetchUserdata",
 				Error: err,
 			},
 			flog.Details{
