@@ -38,7 +38,7 @@ func CentOS(exec sys.Executor) *Implementation {
 	return &Implementation{
 		Executor: exec,
 
-		ID:       &identity.ManagerImplementation{exec},
+		ID:       identity.NewManager(exec),
 		NSS:      &nss.Server{exec},
 		Firewall: &iptables.Implementation{exec},
 		//FileSystem: &file.System{exec},

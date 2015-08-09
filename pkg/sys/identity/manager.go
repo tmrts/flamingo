@@ -7,6 +7,7 @@ import (
 	"github.com/tmrts/flamingo/pkg/util"
 )
 
+// User contains the directives to be used when creating a new user.
 type User struct {
 	Name            string `yaml:"name"`
 	PasswordHash    string `yaml:"passwd" flag:"password"`
@@ -19,7 +20,7 @@ type User struct {
 	GID             string   `yaml:"primary-group" flag:"gid"`
 	SecondaryGroups []string `yaml:"groups" flag:"groups"`
 
-	// TODO(tmrts): add --default flag
+	// TODO(tmrts): add --default user flag?
 	IsInactive                  bool   `yaml:"inactive" flag:"no-create-home"`
 	CreateHomeDir               bool   `yaml:"no-create-home" flag:"no-create-home"`
 	CreateUserGroupWithSameName bool   `flag:"user-group"`
@@ -28,6 +29,7 @@ type User struct {
 	DirectoryTemplate           string `flag:"skel"`
 }
 
+// Group contains the directives to be used when creating a new user group.
 type Group struct {
 	Name            string
 	PasswordHash    string `flag:"password"`
@@ -35,21 +37,29 @@ type Group struct {
 	IsSystemAccount bool   `flag:"system"`
 }
 
+// Group is an interface representing the ability to
+// manipulate system users and groups.
 type Manager interface {
+	// CreateNewUser persists the supplied User to the system.
 	CreateUser(User) error
+	// CreateNewGroup persists the supplied Group to the system.
 	CreateGroup(Group) error
 
+	// SetUserPassword changes the given user's password to supplied password hash.
 	SetUserPassword(string, string) error
+	// SetGroupPassword changes the given group's password to supplied password hash.
 	SetGroupPassword(string, string) error
 
+	// AddUserToGroup adds the user with the given name to the group
+	// with the given name's members.
 	AddUserToGroup(string, string) error
 }
 
-type ManagerImplementation struct {
+type managerImplementation struct {
 	Executor sys.Executor
 }
 
-func (mi *ManagerImplementation) CreateUser(usr User) error {
+func (mi *managerImplementation) CreateUser(usr User) error {
 	args := util.GetArgumentFormOfStruct(usr)
 
 	args = append(args, usr.Name)
@@ -59,7 +69,7 @@ func (mi *ManagerImplementation) CreateUser(usr User) error {
 	return err
 }
 
-func (mi *ManagerImplementation) SetUserPassword(userName, passwordHash string) error {
+func (mi *managerImplementation) SetUserPassword(userName, passwordHash string) error {
 	passwordPair := fmt.Sprintf("%s:%s", userName, passwordHash)
 
 	// TODO(tmrts): pass the password hash using a stdin pipe.
@@ -68,8 +78,7 @@ func (mi *ManagerImplementation) SetUserPassword(userName, passwordHash string) 
 	return err
 }
 
-// CreateNewGroup adds the supplied Group to the system groups.
-func (mi *ManagerImplementation) CreateGroup(grp Group) error {
+func (mi *managerImplementation) CreateGroup(grp Group) error {
 	args := util.GetArgumentFormOfStruct(grp)
 
 	args = append(args, grp.Name)
@@ -79,15 +88,24 @@ func (mi *ManagerImplementation) CreateGroup(grp Group) error {
 	return err
 }
 
-func (mi *ManagerImplementation) SetGroupPassword(groupName, passwordHash string) error {
+func (mi *managerImplementation) SetGroupPassword(groupName, passwordHash string) error {
 	// TODO(tmrts): pass the password hash using a stdin pipe.
 	_, err := mi.Executor.Execute("groupmod", groupName, "--password="+passwordHash)
 
 	return err
 }
 
-func (mi *ManagerImplementation) AddUserToGroup(userName, groupName string) error {
+func (mi *managerImplementation) AddUserToGroup(userName, groupName string) error {
 	_, err := mi.Executor.Execute("usermod", userName, "--append", "--groups="+groupName)
 
 	return err
+}
+
+// NewManager returns the Manager interface implementation that uses given
+// sys.Executor to execute `shadow-utils` system package commands for
+// performing system user/group manipulations.
+func NewManager(e sys.Executor) Manager {
+	return &managerImplementation{
+		Executor: e,
+	}
 }

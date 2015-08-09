@@ -21,9 +21,7 @@ func TestUserCreation(t *testing.T) {
 
 		exec := sys.NewMockExecutor()
 
-		idmgr := &identity.ManagerImplementation{
-			Executor: exec,
-		}
+		idmgr := identity.NewManager(exec)
 
 		Convey("It should create a new user in the system", func() {
 			exec.OutStr <- ""
@@ -45,9 +43,7 @@ func TestUserSetPassword(t *testing.T) {
 
 		exec := sys.NewMockExecutor()
 
-		idmgr := &identity.ManagerImplementation{
-			Executor: exec,
-		}
+		idmgr := identity.NewManager(exec)
 
 		Convey("It should change the password of the user", func() {
 			exec.OutStr <- ""
@@ -73,9 +69,7 @@ func TestGroupCreation(t *testing.T) {
 
 		exec := sys.NewMockExecutor()
 
-		idmgr := &identity.ManagerImplementation{
-			Executor: exec,
-		}
+		idmgr := identity.NewManager(exec)
 
 		Convey("It should create a new group in the system", func() {
 			exec.OutStr <- ""
@@ -97,9 +91,7 @@ func TestGroupSetPassword(t *testing.T) {
 
 		exec := sys.NewMockExecutor()
 
-		idmgr := &identity.ManagerImplementation{
-			Executor: exec,
-		}
+		idmgr := identity.NewManager(exec)
 
 		Convey("It should change the password of the group", func() {
 			exec.OutStr <- ""
