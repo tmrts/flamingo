@@ -5,6 +5,8 @@ import (
 	"strings"
 )
 
+// PasswdEntry is the representation of Name Switch Service
+// 'passwd' database entry fields.
 type PasswdEntry struct {
 	UserName        string
 	UID             int

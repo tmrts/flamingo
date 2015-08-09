@@ -2,6 +2,8 @@ package nss
 
 import "strings"
 
+// GroupShadowEntry is the representation of Name Switch Service
+// 'gshadow' database entry fields.
 type GroupShadowEntry struct {
 	GroupName    string
 	PasswordHash string

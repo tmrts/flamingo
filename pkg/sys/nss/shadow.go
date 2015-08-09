@@ -2,6 +2,8 @@ package nss
 
 import "strings"
 
+// ShadowEntry is the representation of Name Switch Service
+// 'shadow' database entry fields.
 type ShadowEntry struct {
 	UserName      string
 	PasswordHash  string
