@@ -8,7 +8,7 @@ import (
 	"github.com/tmrts/flamingo/pkg/sys"
 )
 
-func TestCommandExecution(t *testing.T) {
+func TestExecutesACommand(t *testing.T) {
 	Convey("Given a command and a list of arguments", t, func() {
 		cmd, args := "echo", []string{"-n", "fi fye fo fum"}
 
@@ -21,7 +21,7 @@ func TestCommandExecution(t *testing.T) {
 	})
 }
 
-func TestExecutingACommandWithErrors(t *testing.T) {
+func TestExecutesAnInvalidCommand(t *testing.T) {
 	Convey("Given an erroneous command", t, func() {
 		cmd := "tHiScOmMaNdDoEsNtExIsT"
 
