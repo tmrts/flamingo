@@ -1,50 +1,27 @@
 package distro
 
 import (
-	"io"
-	"io/ioutil"
-	"os"
-	"strconv"
-	"strings"
-
-	"github.com/tmrts/flamingo/pkg/context"
 	"github.com/tmrts/flamingo/pkg/datasrc/metadata"
 	"github.com/tmrts/flamingo/pkg/datasrc/userdata"
 	"github.com/tmrts/flamingo/pkg/datasrc/userdata/cloudconfig"
-	"github.com/tmrts/flamingo/pkg/file"
 	"github.com/tmrts/flamingo/pkg/flog"
 	"github.com/tmrts/flamingo/pkg/sys/identity"
-	"github.com/tmrts/flamingo/pkg/sys/nss"
-	"github.com/tmrts/flamingo/pkg/sys/ssh"
+	"github.com/tmrts/flamingo/pkg/util/strutil"
 )
 
+// ContextConsumer is the interface that represents the ability to
+// use a metadata.Digest and a userdata.Map for mutating itself.
+// The expected implementers of the interface are operating
+// system implementations.
 type ContextConsumer interface {
 	ConsumeUserdata(userdata.Map) error
 	ConsumeMetadata(*metadata.Digest) error
 }
 
-// ConsumeScript writes the given contents to a temporary file
-// and executes the file.
-func (imp *Implementation) ConsumeScript(c string) error {
-	tempFile := &context.TempFile{
-		Content:     c,
-		Permissions: 0600,
-	}
-
-	return <-context.Using(tempFile, func(f *os.File) error {
-		f.Close()
-		_, err := imp.Execute("sh", f.Name())
-
-		return err
-	})
-}
-
-func sTorc(s string) (rc io.ReadCloser) {
-	return ioutil.NopCloser(strings.NewReader(s))
-}
-
+// consumeCloudConfig parses the given cloud config file contents and
+// consumes the parsed directives.
 func (imp *Implementation) consumeCloudConfig(contents string) error {
-	conf, err := cloudconfig.Parse(sTorc(contents))
+	conf, err := cloudconfig.Parse(strutil.ToReadCloser(contents))
 	if err != nil {
 		flog.Error("Failed to parse cloud config file",
 			flog.Fields{
@@ -58,75 +35,13 @@ func (imp *Implementation) consumeCloudConfig(contents string) error {
 
 	flog.Debug("Persisting files",
 		flog.Fields{
-			Event: "distro.consumeCloudConfig",
+			Event: "distro.Implementation.consumeCloudConfig",
 		},
 	)
 
-	for _, f := range conf.Files {
-		p, err := strconv.Atoi(f.Permissions)
-		if err != nil {
-			flog.Error("Failed to convert permissions",
-				flog.Fields{
-					Event: "strconv.Atoi",
-					Error: err,
-				},
-				flog.Details{
-					"file":        f.Path,
-					"permissions": f.Permissions,
-				},
-			)
-			continue
-		}
+	imp.writeFiles(conf.Files)
 
-		perms := os.FileMode(p)
-
-		err = file.New(f.Path, file.Permissions(perms), file.Contents(f.Content))
-		if err != nil {
-			flog.Error("Failed to create file",
-				flog.Fields{
-					Event: "file.New",
-					Error: err,
-				},
-				flog.Details{
-					"file": f.Path,
-				},
-			)
-		}
-	}
-
-	for _, cmd := range conf.Commands {
-		flog.Debug("Executing command",
-			flog.Fields{
-				Event: "distro.consumeCloudConfig",
-			},
-			flog.Details{
-				"command": cmd,
-			},
-		)
-
-		out, err := imp.Execute(cmd[0], cmd[1:]...)
-		if err != nil {
-			flog.Error("Failed to execute command",
-				flog.Fields{
-					Event: "Implementation.Execute",
-					Error: err,
-				},
-				flog.Details{
-					"command": cmd,
-				},
-			)
-		}
-
-		flog.Debug("Executed command",
-			flog.Fields{
-				Event: "identityManager.CreateGroup",
-			},
-			flog.Details{
-				"command": cmd,
-				"output":  out,
-			},
-		)
-	}
+	imp.consumeCommands(conf.Commands)
 
 	for grpName, _ := range conf.Groups {
 		flog.Info("Creating user group",
@@ -205,42 +120,7 @@ func (imp *Implementation) consumeCloudConfig(contents string) error {
 		}
 	}
 
-	for userName, sshKeys := range conf.AuthorizedKeys {
-		flog.Info("Authorizing SSH keys",
-			flog.Fields{
-				Event: "distro.consumeCloudConfig",
-			},
-			flog.Details{
-				"user": userName,
-			},
-		)
-
-		usr, err := nss.GetUser(userName)
-		if err != nil {
-			flog.Error("Failed to retrieve user NSS entry",
-				flog.Fields{
-					Event: "nss.GetUser",
-					Error: err,
-				},
-				flog.Details{
-					"user": userName,
-				},
-			)
-			continue
-		}
-
-		if err := ssh.AuthorizeKeysFor(usr, sshKeys); err != nil {
-			flog.Error("Failed to authorize SSH keys for user",
-				flog.Fields{
-					Event: "ssh.AuthorizeKeysFor",
-					Error: err,
-				},
-				flog.Details{
-					"user": userName,
-				},
-			)
-		}
-	}
+	imp.consumeSSHKeys(conf.AuthorizedKeys)
 
 	return err
 }
@@ -257,15 +137,26 @@ func (imp *Implementation) ConsumeUserdata(u userdata.Map) error {
 
 	// TODO(tmrts): Use only scripts with 'startup', 'shutdown', 'user-data'.
 	scripts := u.Scripts()
+	flog.Info("Searched for script files",
+		flog.Fields{
+			Event: "userdata.Map.Scripts",
+		},
+		flog.Details{
+			"count": len(scripts),
+		},
+	)
+
+	imp.consumeScripts(scripts)
 
 	confs := u.CloudConfigs()
-	if len(confs) > 1 {
-		flog.Info("Found multiple cloud-config files",
-			flog.Fields{
-				Event: "distro.ConsumeUserdata",
-			},
-		)
-	}
+	flog.Info("Searched for cloud-config files",
+		flog.Fields{
+			Event: "userdata.Map.CloudConfigs",
+		},
+		flog.Details{
+			"count": len(confs),
+		},
+	)
 
 	for name, content := range confs {
 		flog.Info("Consuming user-data file",
@@ -294,52 +185,27 @@ func (imp *Implementation) ConsumeUserdata(u userdata.Map) error {
 		}
 	}
 
-	for name, content := range scripts {
-		flog.Info("Executing script",
-			flog.Fields{
-				Event: "distro.ConsumeUserdata",
-			},
-			flog.Details{
-				"name": name,
-			},
-		)
-
-		if err := imp.ConsumeScript(content); err != nil {
-			flog.Error("Failed to execute script",
-				flog.Fields{
-					Event: "distro.ConsumeScript",
-				},
-				flog.Details{
-					"name": name,
-				},
-				flog.DebugFields{
-					"content": content,
-				},
-			)
-		}
-	}
-
 	flog.Info("Finished consuming user-data",
 		flog.Fields{
-			Event: "distro.ConsumeUserdata",
+			Event: "distro.Implementation.ConsumeUserdata",
 		},
 	)
 
 	return nil
 }
 
-// ConsumeUserdata uses the given userdata to contextualize the distribution implementation.
+// ConsumeMetadata uses the given userdata to contextualize the distribution implementation.
 func (imp *Implementation) ConsumeMetadata(m *metadata.Digest) error {
 	flog.Info("Consuming meta-data",
 		flog.Fields{
-			Event: "distro.ConsumeMetadata",
+			Event: "distro.Implementation.ConsumeMetadata",
 		},
 	)
 
-	if err := imp.SetHostname(m.Hostname); err != nil {
+	if err := imp.setHostname(m.Hostname); err != nil {
 		flog.Error("Failed to set hostname",
 			flog.Fields{
-				Event: "distro.SetHostname",
+				Event: "distro.Implementation.setHostname",
 			},
 			flog.Details{
 				"name": m.Hostname,
@@ -348,49 +214,11 @@ func (imp *Implementation) ConsumeMetadata(m *metadata.Digest) error {
 		return err
 	}
 
-	for userName, sshKeys := range m.SSHKeys {
-		flog.Info("Authorizing SSH keys",
-			flog.Fields{
-				Event: "distro.consumeMetadata",
-			},
-			flog.Details{
-				"user": userName,
-			},
-		)
-
-		usr, err := nss.GetUser(userName)
-		if err != nil {
-			flog.Error("Failed to retrieve user NSS entry",
-				flog.Fields{
-					Event: "nss.GetUser",
-					Error: err,
-				},
-				flog.Details{
-					"user": userName,
-				},
-			)
-			continue
-		}
-
-		if err := ssh.AuthorizeKeysFor(usr, sshKeys); err != nil {
-			flog.Error("Failed to authorize SSH keys for user",
-				flog.Fields{
-					Event: "ssh.AuthorizeKeysFor",
-					Error: err,
-				},
-				flog.Details{
-					"user": userName,
-				},
-				flog.DebugFields{
-					"SSHKeys": sshKeys,
-				},
-			)
-		}
-	}
+	imp.consumeSSHKeys(m.SSHKeys)
 
 	flog.Info("Finished consuming meta-data",
 		flog.Fields{
-			Event: "distro.ConsumeUserdata",
+			Event: "distro.Implementation.ConsumeUserdata",
 		},
 	)
 
