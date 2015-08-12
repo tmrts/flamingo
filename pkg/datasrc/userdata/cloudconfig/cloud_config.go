@@ -1,3 +1,4 @@
+// Package cloudconfig validates and parses a cloud-config data file.
 package cloudconfig
 
 import (
@@ -12,6 +13,9 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
+// WriteFile represents the write_file directive found in a
+// cloud-config file. It contains the fields necessary to create
+// a new file in the system.
 type WriteFile struct {
 	Path        string
 	Owner       string
@@ -25,6 +29,10 @@ var (
 	ErrNotACloudConfigFile = errors.New("cloudconfig: not a cloud-config file")
 )
 
+// IsValid reads from the given io.ReadCloser and determines
+// whether the read contents belong to a valid cloud-config file.
+// It returns an ErrNotACloudConfigFile if the file is not a valid cloud-config file.
+// If it encounters an error while reading from the io.ReadCloser it returns the error.
 func IsValid(rdr io.ReadCloser) error {
 	buf, err := ioutil.ReadAll(rdr)
 	if err != nil {
@@ -64,7 +72,8 @@ type Digest struct {
 	SSHKeyPairs    []ssh.KeyPair
 }
 
-// Parse parses the given cloud-config file when it's path is given.
+// Parse reads from the given io.ReadCloser and
+// parses read contents of a cloud-config file.
 func Parse(rdr io.ReadCloser) (*Digest, error) {
 	buf, err := ioutil.ReadAll(rdr)
 	if err != nil {
