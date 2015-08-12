@@ -31,7 +31,7 @@ func TestRunCmdParsing(t *testing.T) {
 			So(conf.Commands[0], ShouldConsistOf, "ls", "-l", "/")
 			So(conf.Commands[1], ShouldConsistOf, "sh", "-xc", "echo $(date) ': hello world!'")
 			So(conf.Commands[2], ShouldConsistOf, "sh", "-c", "echo \"=========hello world'=========\"")
-			So(conf.Commands[3], ShouldConsistOf, "ls -l /root")
+			So(conf.Commands[3], ShouldConsistOf, "sh", "-c", "ls -l /root")
 			So(conf.Commands[4], ShouldConsistOf, "wget", "http://slashdot.org", "-O", "/tmp/index.html")
 		})
 	})

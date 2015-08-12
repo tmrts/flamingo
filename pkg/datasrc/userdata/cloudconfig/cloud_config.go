@@ -121,23 +121,20 @@ func Parse(rdr io.ReadCloser) (*Digest, error) {
 }
 
 func parseCommands(runcmd []interface{}) (commands [][]string) {
+	var cmds []string
+
 	for _, cmd := range runcmd {
-		switch cmd.(type) {
+		switch cmd := cmd.(type) {
 		case string:
-			commands = append(commands, []string{cmd.(string)})
+			cmds = []string{"sh", "-c", cmd}
 		case []interface{}:
-			var cmds []string
-			for _, s := range cmd.([]interface{}) {
+			cmds = []string{}
+			for _, s := range cmd {
 				cmds = append(cmds, s.(string))
 			}
-
-			// If it's a single command, use bash as the interpreter.
-			if len(cmds) == 1 {
-				cmds = append([]string{"bash"}, cmds[0])
-			}
-
-			commands = append(commands, cmds)
 		}
+
+		commands = append(commands, cmds)
 	}
 
 	return
