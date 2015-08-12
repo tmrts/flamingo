@@ -15,4 +15,4 @@ install:
 
 script:
   - bin/test -v -race
-  - goveralls -repotoken $COVERALLS_TOKEN
+  - $HOME/gopath/bin/goveralls -service=travis-ci
