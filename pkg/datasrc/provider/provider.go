@@ -1,3 +1,4 @@
+// Package provider contains the interface for a data source provider
 package provider
 
 import (
@@ -14,11 +15,13 @@ import (
 //	fmt.Printf(u.Fill("latest", "hostname")) -> http://169.256.169.256/metadata/latest/hostname"
 type FormatURL string
 
+// Fill method is a wrapper around fmt.Sprintf to fill format URLs.
 func (u FormatURL) Fill(values ...interface{}) string {
 	return fmt.Sprintf(string(u), values...)
 }
 
-// Interface is the interface that wraps the meta-data retrieval method.
+// Interface is the interface that represents the ability to
+// provide both user-data and meta-data information.
 type Interface interface {
 	metadata.Provider
 	userdata.Provider
