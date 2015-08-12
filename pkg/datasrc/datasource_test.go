@@ -16,7 +16,7 @@ import (
 	"github.com/tmrts/flamingo/pkg/util/testutil"
 )
 
-func TestFetchMetadata(t *testing.T) {
+func TestFetchsMetadata(t *testing.T) {
 	Convey("Given a list of datasources and a timeout duration", t, func() {
 		mockGCEServer := testutil.NewMockServer(func(w http.ResponseWriter, r *http.Request) {
 			var json_path string
