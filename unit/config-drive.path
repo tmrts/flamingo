@@ -1,5 +1,0 @@
-[Unit]
-Description=Config Drive unit for /media/configdrive
-
-[Path]
-DirectoryNotEmpty=/media/configdrive
