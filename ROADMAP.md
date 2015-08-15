@@ -11,14 +11,14 @@
     - [X] Meta-Data
     - [X] Cloud-Config
     - [X] Config-Drive
-    - [ ] Integration with Systemd (using config-drive.mount instead of manual checks)
+    - [X] Integration with Systemd (using config-drive.mount instead of manual checks)
 - [X] Atomic Host Package Configuration
     - [ ] rpm-ostree features
-    - [ ] Example configurations
-- [ ] *Test Images*
-- [ ] Integration Tests
+    - [X] Example configurations
+- [X] *Test Images*
+- [X] Integration Tests
     - [X] OpenStack
-    - [ ] Amazon EC2
+    - [X] Amazon EC2
     - [X] Google Compute Engine
     - [ ] OpenNebula
 - [ ] Disk Volume Management
