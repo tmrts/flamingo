@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
+
+	"github.com/tmrts/flamingo/pkg/flog"
 )
 
 var DefaultClient = ClientImplementation{http.DefaultClient}
@@ -25,6 +27,17 @@ func (c *ClientImplementation) performRequest(r *Request) (*Response, error) {
 	}
 
 	if !strings.HasPrefix(resp.Status, "20") {
+		flog.Debug("Failed to get a proper HTTP response",
+			flog.Fields{
+				Error: err,
+				Event: "performRequest",
+			},
+			flog.Details{
+				"url":     r.URL,
+				"method":  r.Method,
+				"headers": r.Headers,
+			},
+		)
 		return nil, fmt.Errorf("request: bad status code %v", resp.StatusCode)
 	}
 
