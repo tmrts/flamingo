@@ -70,12 +70,12 @@ func isAvailable(p Provider) bool {
 func FindProvider(providers map[string]Provider, timeout time.Duration) (Provider, error) {
 	providerChan := make(chan Provider)
 
-	for _, p := range providers {
-		go func() {
+	for _, provider := range providers {
+		go func(p Provider) {
 			if isAvailable(p) {
 				providerChan <- p
 			}
-		}()
+		}(provider)
 	}
 
 	timeoutChan := time.NewTimer(timeout).C
