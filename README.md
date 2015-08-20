@@ -1,6 +1,15 @@
 # Flamingo
 
-[![Travis](https://travis-ci.org/tmrts/flamingo.svg?branch=master)](https://travis-ci.org/tmrts/flamingo) [![Coverage Status](https://coveralls.io/repos/tmrts/flamingo/badge.svg?branch=master&service=github)](https://coveralls.io/github/tmrts/flamingo?branch=master) [![GoDoc](https://godoc.org/github.com/tmrts/flamingo?status.png)](https://godoc.org/github.com/tmrts/flamingo) [![Stories in Ready](https://badge.waffle.io/tmrts/flamingo.png?label=ready&title=Ready)](https://waffle.io/tmrts/flamingo)
+[![Travis Widget]][Travis] [![Coverage Widget]][Coverage] [![Documentation Widget]][Documentation] [![Waffle Widget]][Waffle]
+
+[Travis Widget]: https://travis-ci.org/tmrts/flamingo.svg?branch=master
+[Travis]: http://travis-ci.org/tmrts/flamingo
+[Coverage Widget]: https://coveralls.io/repos/tmrts/flamingo/badge.svg?branch=master&service=github
+[Coverage]: https://coveralls.io/github/tmrts/flamingo?branch=master
+[Documentation Widget]: https://godoc.org/github.com/tmrts/flamingo?status.png
+[Documentation]: https://godoc.orgp/github.com/tmrts/flamingo
+[Waffle Widget]: https://badge.waffle.io/tmrts/flamingo.png?label=ready&title=Ready
+[Waffle]: https://waffle.io/tmrts/flamingo
 
 ![Flamingo Logo](/logo.png)
 
@@ -39,6 +48,23 @@ maintainer.
   dependencies. In addition, cloud images will be smaller as well.
 
 - Testability, Documentation and Extensibility is heavily emphasized in *Flamingo*.
+
+## Installation
+
+You can find the latest source `RPM` releases [here](https://github.com/tmrts/flamingo/releases/latest)
+
+For **fedora**, you can also use the `copr` repository
+``` bash
+dnf copr enable tamertas/flamingo
+dnf install flamingo
+```
+
+## Configuration
+
+`Flamingo` supports configuration through `cloud-config` files similar to
+`cloud-init`.
+
+It supports a subset of `cloud-init` `cloud-config`.
 
 ## Discussions
 If you'd like to contribute, learn more, or share your opinions
