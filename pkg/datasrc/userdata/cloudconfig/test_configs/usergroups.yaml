@@ -1,8 +1,8 @@
 # Add groups to the system
-# The following example adds the ubuntu group with members foo and bar and
+# The following example adds the centos group with members foo and bar and
 # the group cloud-users.
 groups:
-  - ubuntu: [foo,bar]
+  - centos: [foo,bar]
   - cloud-users
 
 # Add users to the system. Users are added after groups are added.
@@ -76,29 +76,3 @@ users:
 #               directive.
 #   system: Create the user as a system user. This means no home directory.
 #
-
-# Default user creation:
-#
-# Unless you define users, you will get a 'ubuntu' user on ubuntu systems with the
-# legacy permission (no password sudo, locked user, etc). If however, you want
-# to have the 'ubuntu' user in addition to other users, you need to instruct
-# cloud-init that you also want the default user. To do this use the following
-# syntax:
-#    users:
-#      - default
-#      - bob
-#      - ....
-#  foobar: ...
-#
-# users[0] (the first user in users) overrides the user directive.
-#
-# The 'default' user above references the distro's config:
-# system_info:
-#   default_user:
-#    name: Ubuntu
-#    plain_text_passwd: 'ubuntu'
-#    home: /home/ubuntu
-#    shell: /bin/bash
-#    lock_passwd: True
-#    gecos: Ubuntu
-#    groups: [adm, audio, cdrom, dialout, floppy, video, plugdev, dip, netdev]
