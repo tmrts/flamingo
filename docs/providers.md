@@ -11,10 +11,6 @@ In 'OpenStack' you can either use, the meta-data service that
 receives cloud-config files through command-line or
 you can use `Config-Drive` disk images for configuration.
 
-### Config-Drive Disk
-The disk image must be labeled 'config-2'. For more details,
-please [see](http://docs.openstack.org/user-guide/cli_config_drive.html).
-
 ## Amazon Elastic Compute Cloud
 You can use `Flamingo` in `EC2`, to provide meta-data or
 user-data please [see](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-metadata.html).
