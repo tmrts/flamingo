@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/tmrts/flamingo.png?label=ready&title=Ready)](https://waffle.io/tmrts/flamingo)
 # Flamingo
 
 [![Travis Widget]][Travis] [![Coverage Widget]][Coverage] [![Documentation Widget]][Documentation] [![Waffle Widget]][Waffle]
